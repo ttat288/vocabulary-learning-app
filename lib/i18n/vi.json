@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "VocabFlow",
+    "settings": "Cài đặt"
+  },
+  "onboarding": {
+    "heading": "Học Tiếng Anh",
+    "tagline": "Nắm vững từ vựng hàng ngày. Không cần đăng nhập. Chỉ cần học.",
+    "question": "Bạn muốn học bao nhiêu từ mỗi ngày?",
+    "goal10": "10 từ",
+    "goal20": "20 từ",
+    "goal50": "50 từ",
+    "goalUnlimited": "Không giới hạn",
+    "footer": "Tiến độ được đồng bộ hóa tự động. Học trên bất kỳ thiết bị nào."
+  },
+  "learning": {
+    "rememberButton": "Tôi Nhớ",
+    "notYetButton": "Chưa",
+    "definition": "Định Nghĩa",
+    "example": "Ví Dụ",
+    "translation": "Dịch Sang Tiếng Việt",
+    "explainButton": "Giải Thích AI",
+    "explainAgain": "Xin Giải Thích Khác",
+    "explaining": "Đang Tạo...",
+    "aiExplanation": "Giải Thích AI",
+    "retryExplanation": "Xin giải thích khác",
+    "tryAgain": "Thử lại"
+  },
+  "completion": {
+    "heading": "Tuyệt Vời!",
+    "subtitle": "Hoàn Thành Mục Tiêu Hàng Ngày",
+    "wordsLearned": "từ đã học",
+    "reviewQueueLabel": "cần ôn lại",
+    "continueButton": "Tiếp Tục Học",
+    "finishButton": "Kết Thúc Hôm Nay",
+    "streak": "Chuỗi Hiện Tại"
+  },
+  "settings": {
+    "heading": "Cài Đặt",
+    "dailyGoalLabel": "Mục Tiêu Hàng Ngày",
+    "themeLabel": "Giao Diện",
+    "darkMode": "Chuyển Sang Sáng",
+    "lightMode": "Chuyển Sang Tối",
+    "languageLabel": "Ngôn Ngữ",
+    "resetButton": "Đặt Lại Tất Cả Tiến Độ",
+    "resetConfirm": "Bạn chắc chứ? Hành động này không thể hoàn tác.",
+    "resetCancel": "Hủy",
+    "resetConfirm": "Đặt Lại"
+  },
+  "progressBar": {
+    "of": "trên"
+  }
+}

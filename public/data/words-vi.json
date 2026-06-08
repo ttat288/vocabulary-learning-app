@@ -1,0 +1,402 @@
+[
+  {
+    "id": "1",
+    "word": "Serendipity",
+    "phonetic": "/ˌserənˈdɪpɪti/",
+    "meaning": "Sự tình cờ gặp được điều may mắn hoặc có lợi",
+    "example": "Finding that old letter was pure serendipity.",
+    "exampleMeaning": "Tìm thấy cái thư cũ đó hoàn toàn là một sự trùng hợp may mắn"
+  },
+  {
+    "id": "2",
+    "word": "Ephemeral",
+    "phonetic": "/ɪˈfem(ə)rəl/",
+    "meaning": "Tồn tại trong thời gian rất ngắn; chỉ tạm thời",
+    "example": "The beauty of cherry blossoms is ephemeral.",
+    "exampleMeaning": "Vẻ đẹp của hoa anh đào chỉ tồn tại trong thời gian rất ngắn"
+  },
+  {
+    "id": "3",
+    "word": "Nostalgia",
+    "phonetic": "/nɒˈstaldʒə/",
+    "meaning": "Nỗi nhớ nhung tình cảm về quá khứ; thứ gì đó từ quá khứ",
+    "example": "She felt a wave of nostalgia listening to their old songs.",
+    "exampleMeaning": "Cô cảm thấy nhớ nhung khi nghe những bài hát cũ của họ"
+  },
+  {
+    "id": "4",
+    "word": "Ubiquitous",
+    "phonetic": "/juːˈbɪkwɪtəs/",
+    "meaning": "Xuất hiện, có mặt ở khắp nơi",
+    "example": "Smartphones have become ubiquitous in modern society.",
+    "exampleMeaning": "Điện thoại thông minh đã trở nên phổ biến ở khắp xã hội hiện đại"
+  },
+  {
+    "id": "5",
+    "word": "Mellifluous",
+    "phonetic": "/meˈlɪfluəs/",
+    "meaning": "Ngọt ngào hoặc âm nhạc; dễ chịu khi nghe",
+    "example": "Her mellifluous voice captivated the entire audience.",
+    "exampleMeaning": "Giọng nói ngọt ngào của cô ấy thu hút toàn bộ khán giả"
+  },
+  {
+    "id": "6",
+    "word": "Sanguine",
+    "phonetic": "/ˈsæŋɡwɪn/",
+    "meaning": "Lạc quan hoặc tích cực trong cách nhìn nhận; đầy hy vọng",
+    "example": "Despite the challenges, she remained sanguine about the future.",
+    "exampleMeaning": "Mặc dù gặp khó khăn, cô vẫn lạc quan về tương lai"
+  },
+  {
+    "id": "7",
+    "word": "Lackadaisical",
+    "phonetic": "/ˌlækəˈdeɪzɪkəl/",
+    "meaning": "Thiếu nhiệt tình, nỗ lực hoặc quan tâm; phớt lờ",
+    "example": "He had a lackadaisical approach to his studies.",
+    "exampleMeaning": "Anh ấy không chăm chỉ trong học tập"
+  },
+  {
+    "id": "8",
+    "word": "Obfuscate",
+    "phonetic": "/ɒbˈfʌskeɪt/",
+    "meaning": "Cố tình làm cho cái gì đó trở nên không rõ ràng hoặc ẩn giấu",
+    "example": "The politician tried to obfuscate the truth with complex language.",
+    "exampleMeaning": "Chính trị gia cố gắng che giấu sự thật bằng ngôn ngữ phức tạp"
+  },
+  {
+    "id": "9",
+    "word": "Candid",
+    "phonetic": "/ˈkændɪd/",
+    "meaning": "Thẳng thắn, trung thực, và rõ ràng",
+    "example": "He gave a candid opinion about the project's failures.",
+    "exampleMeaning": "Anh ấy nói thẳng thắn về những thất bại của dự án"
+  },
+  {
+    "id": "10",
+    "word": "Pragmatic",
+    "phonetic": "/præɡˈmætɪk/",
+    "meaning": "Xử lý mọi thứ theo cách thực tế, dựa trên tình huống thực tế",
+    "example": "We need a pragmatic solution, not an idealistic one.",
+    "exampleMeaning": "Chúng ta cần một giải pháp thực tế, không phải lý tưởng"
+  },
+  {
+    "id": "11",
+    "word": "Eloquent",
+    "phonetic": "/ˈeləkwənt/",
+    "meaning": "Lưu loát, thuyết phục, và biểu cảm trong nói hay viết",
+    "example": "The speaker delivered an eloquent speech about social justice.",
+    "exampleMeaning": "Diễn giả đã phát biểu một bài nói hay về công bằng xã hội"
+  },
+  {
+    "id": "12",
+    "word": "Benevolent",
+    "phonetic": "/bəˈnevələnt/",
+    "meaning": "Tốt bụng, hào phóng, và hữu ích",
+    "example": "The benevolent organization donated food to the poor.",
+    "exampleMeaning": "Tổ chức tốt bụng đã tặng thực phẩm cho người nghèo"
+  },
+  {
+    "id": "13",
+    "word": "Nonchalant",
+    "phonetic": "/ˌnɒnʃəˈlɑːnt/",
+    "meaning": "Bình thường và không quan tâm; không lo lắng",
+    "example": "She had a nonchalant attitude towards the upcoming exam.",
+    "exampleMeaning": "Cô ấy không hề lo lắng về kỳ thi sắp tới"
+  },
+  {
+    "id": "14",
+    "word": "Perfunctory",
+    "phonetic": "/pəˈfʌŋktəri/",
+    "meaning": "Được làm một cách thường lệ với ít nỗ lực hoặc suy nghĩ",
+    "example": "He gave a perfunctory apology without really meaning it.",
+    "exampleMeaning": "Anh ấy xin lỗi theo quy tắc mà không thực sự có ý"
+  },
+  {
+    "id": "15",
+    "word": "Alacrity",
+    "phonetic": "/əˈlækrɪti/",
+    "meaning": "Sự hoan hỷ và nhiệt tình; sự nhanh nhẫn",
+    "example": "She accepted the job offer with alacrity.",
+    "exampleMeaning": "Cô ấy nhận lời đề nghị công việc với sự hoan hỷ"
+  },
+  {
+    "id": "16",
+    "word": "Ambiguous",
+    "phonetic": "/æmˈbɪɡjuəs/",
+    "meaning": "Có thể hiểu theo nhiều cách khác nhau; không rõ ràng",
+    "example": "The statement was so ambiguous that everyone interpreted it differently.",
+    "exampleMeaning": "Câu nói đó mơ hồ đến mức mọi người hiểu nó khác nhau"
+  },
+  {
+    "id": "17",
+    "word": "Tangible",
+    "phonetic": "/ˈtændʒɪbəl/",
+    "meaning": "Có thể cảm nhận được bằng xúc giác; rõ ràng và xác định",
+    "example": "We need tangible results, not just promises.",
+    "exampleMeaning": "Chúng ta cần kết quả thực tế, không chỉ là lời hứa"
+  },
+  {
+    "id": "18",
+    "word": "Meticulous",
+    "phonetic": "/məˈtɪkjuləs/",
+    "meaning": "Chú ý đến chi tiết; rất cẩn thận",
+    "example": "She performed the surgery with meticulous precision.",
+    "exampleMeaning": "Cô ấy thực hiện phẫu thuật một cách cẩn thận và chính xác"
+  },
+  {
+    "id": "19",
+    "word": "Ambivalent",
+    "phonetic": "/æmˈbɪvələnt/",
+    "meaning": "Có cảm xúc lẫn lộn hoặc ý kiến mâu thuẫn về cái gì",
+    "example": "I feel ambivalent about moving to a new city.",
+    "exampleMeaning": "Tôi có cảm xúc lẫn lộn về việc chuyển tới thành phố mới"
+  },
+  {
+    "id": "20",
+    "word": "Indefatigable",
+    "phonetic": "/ˌɪndɪˈfætɪɡəbəl/",
+    "meaning": "Không bao giờ mệt mỏi; không mất hết sức lực",
+    "example": "She was an indefatigable worker who never complained.",
+    "exampleMeaning": "Cô ấy là một người lao động không bao giờ mệt mỏi"
+  },
+  {
+    "id": "21",
+    "word": "Somberly",
+    "phonetic": "/ˈsɒmbəli/",
+    "meaning": "Một cách nghiêm túc, trang trọng, hoặc u ám",
+    "example": "He spoke somberly about the accident.",
+    "exampleMeaning": "Anh ấy nói một cách nghiêm túc về vụ tai nạn"
+  },
+  {
+    "id": "22",
+    "word": "Vindicate",
+    "phonetic": "/ˈvɪndɪkeɪt/",
+    "meaning": "Minh oan ai đó khỏi lỗi lầm; chứng minh là có lý do",
+    "example": "The evidence vindicated him of all charges.",
+    "exampleMeaning": "Bằng chứng đã minh oan anh ấy khỏi mọi cáo buộc"
+  },
+  {
+    "id": "23",
+    "word": "Proliferate",
+    "phonetic": "/prəˈlɪfəreɪt/",
+    "meaning": "Tăng số lượng nhanh chóng; nhân đôi",
+    "example": "Rumors proliferated after the news announcement.",
+    "exampleMeaning": "Nhiều tin đồn lan truyền nhanh chóng sau khi tin tức được công bố"
+  },
+  {
+    "id": "24",
+    "word": "Esoteric",
+    "phonetic": "/ˌesəˈterɪk/",
+    "meaning": "Dành cho một nhóm nhỏ; bí ẩn và khó hiểu",
+    "example": "The book was too esoteric for general audiences.",
+    "exampleMeaning": "Cuốn sách quá chuyên sâu đến mức đa số người không hiểu"
+  },
+  {
+    "id": "25",
+    "word": "Venerate",
+    "phonetic": "/ˈvenəreɪt/",
+    "meaning": "Coi trọng và tôn kính ai đó hoặc cái gì",
+    "example": "Many people venerate historical leaders.",
+    "exampleMeaning": "Nhiều người tôn kính các nhà lãnh đạo lịch sử"
+  },
+  {
+    "id": "26",
+    "word": "Ameliorate",
+    "phonetic": "/əˈmiːliəreɪt/",
+    "meaning": "Làm cho cái gì tốt hơn; cải thiện",
+    "example": "New policies helped ameliorate the housing crisis.",
+    "exampleMeaning": "Những chính sách mới đã giúp cải thiện tình hình khủng hoảng nhà ở"
+  },
+  {
+    "id": "27",
+    "word": "Cacophony",
+    "phonetic": "/kəˈkɒfəni/",
+    "meaning": "Một sự pha trộn âm thanh khắc họa, khó chịu",
+    "example": "The construction site was a cacophony of noise.",
+    "exampleMeaning": "Công trường xây dựng tràn ngập những tiếng ồn khắc họa"
+  },
+  {
+    "id": "28",
+    "word": "Diffident",
+    "phonetic": "/ˈdɪfɪdənt/",
+    "meaning": "Thiếu tự tin về bản thân; nhút nhát",
+    "example": "The diffident student rarely raised their hand in class.",
+    "exampleMeaning": "Học sinh nhút nhát hiếm khi giơ tay trong lớp"
+  },
+  {
+    "id": "29",
+    "word": "Sagacious",
+    "phonetic": "/səˈɡeɪʃəs/",
+    "meaning": "Có kỹ năng phán đoán tốt hoặc sáng suốt; khôn ngoan",
+    "example": "Her sagacious advice helped us make the right decision.",
+    "exampleMeaning": "Lời khuyên khôn ngoan của cô ấy đã giúp chúng ta quyết định đúng"
+  },
+  {
+    "id": "30",
+    "word": "Perspicacious",
+    "phonetic": "/ˌpɜːspɪˈkeɪʃəs/",
+    "meaning": "Có cái nhìn sâu sắc và lý giải tốt; có khả năng nhìn thấu",
+    "example": "The critic made perspicacious observations about the film.",
+    "exampleMeaning": "Nhà phê bình đã đưa ra những nhận xét sâu sắc về bộ phim"
+  },
+  {
+    "id": "31",
+    "word": "Pallid",
+    "phonetic": "/ˈpælɪd/",
+    "meaning": "Nhợt nhạt; thiếu sắc vía hoặc sức sống",
+    "example": "He looked pallid after the long illness.",
+    "exampleMeaning": "Anh ấy trông nhợt nhạt sau khoảng thời gian bệnh tật"
+  },
+  {
+    "id": "32",
+    "word": "Fervent",
+    "phonetic": "/ˈfɜːrvənt/",
+    "meaning": "Đầy đam mê, mãnh liệt, và hồ hớp",
+    "example": "She was a fervent supporter of environmental causes.",
+    "exampleMeaning": "Cô ấy là một người ủng hộ mãnh liệt các vấn đề môi trường"
+  },
+  {
+    "id": "33",
+    "word": "Lugubrious",
+    "phonetic": "/luːˈɡuːbriəs/",
+    "meaning": "Sâu thẳm, ảm đạm, hoặc buồn bã",
+    "example": "The lugubrious music perfectly matched the sad film.",
+    "exampleMeaning": "Âm nhạc ảm đạm hoàn toàn phù hợp với bộ phim buồn"
+  },
+  {
+    "id": "34",
+    "word": "Incisive",
+    "phonetic": "/ɪnˈsaɪsɪv/",
+    "meaning": "Sắc sảo và rõ ràng trong trí tuệ; sâu sắc",
+    "example": "The professor gave an incisive analysis of the problem.",
+    "exampleMeaning": "Giáo sư đã phân tích vấn đề một cách sắc sảo và rõ ràng"
+  },
+  {
+    "id": "35",
+    "word": "Docile",
+    "phonetic": "/ˈdɒsaɪl/",
+    "meaning": "Vâng lời và dễ dạy",
+    "example": "The docile dog followed every command.",
+    "exampleMeaning": "Con chó ngoan ngoãn làm theo mọi lệnh"
+  },
+  {
+    "id": "36",
+    "word": "Pungent",
+    "phonetic": "/ˈpʌndʒənt/",
+    "meaning": "Có mùi hoặc vị mạnh, cắt nồn",
+    "example": "The pungent odor of garlic filled the kitchen.",
+    "exampleMeaning": "Mùi nồn của tỏi lan khắp phòng bếp"
+  },
+  {
+    "id": "37",
+    "word": "Impeccable",
+    "phonetic": "/ɪmˈpekəbəl/",
+    "meaning": "Hoàn hảo; không có bất kỳ lỗi lầm nào",
+    "example": "His impeccable manners impressed everyone.",
+    "exampleMeaning": "Cách cư xử hoàn hảo của anh ấy đã gây ấn tượng với mọi người"
+  },
+  {
+    "id": "38",
+    "word": "Querulous",
+    "phonetic": "/ˈkwerələs/",
+    "meaning": "Phàn nàn theo cách khó chịu",
+    "example": "She had a querulous tone when discussing the service.",
+    "exampleMeaning": "Cô ấy có giọng phàn nàn khi thảo luận về dịch vụ"
+  },
+  {
+    "id": "39",
+    "word": "Gregarious",
+    "phonetic": "/ɡrɪˈɡeəriəs/",
+    "meaning": "Thích ở bên cạnh người khác; tính xã hội",
+    "example": "Being gregarious, he enjoyed large parties.",
+    "exampleMeaning": "Vì thích ở bên cạnh mọi người, anh ấy thích những bữa tiệc lớn"
+  },
+  {
+    "id": "40",
+    "word": "Phlegmatic",
+    "phonetic": "/fleɡˈmætɪk/",
+    "meaning": "Bình tĩnh và không cảm xúc; không dễ bị xúc động",
+    "example": "He had a phlegmatic response to the bad news.",
+    "exampleMeaning": "Anh ấy phản ứng bình tĩnh trước tin tức xấu"
+  },
+  {
+    "id": "41",
+    "word": "Transient",
+    "phonetic": "/ˈtrænziənt/",
+    "meaning": "Tạm thời; tồn tại trong thời gian ngắn",
+    "example": "The joy of winning was transient.",
+    "exampleMeaning": "Niềm vui của chiến thắng không kéo dài lâu"
+  },
+  {
+    "id": "42",
+    "word": "Pellucid",
+    "phonetic": "/pəˈluːsɪd/",
+    "meaning": "Rõ ràng, trong suốt, hoặc dễ hiểu",
+    "example": "The instructions were pellucid and easy to follow.",
+    "exampleMeaning": "Hướng dẫn rất rõ ràng và dễ theo dõi"
+  },
+  {
+    "id": "43",
+    "word": "Ostentatious",
+    "phonetic": "/ˌɒstenˈteɪʃəs/",
+    "meaning": "Được thiết kế để gây ấn tượng hoặc anh chú ý; lộng lẫy",
+    "example": "His ostentatious jewelry seemed overdone.",
+    "exampleMeaning": "Trang sức lộng lẫy của anh ấy có vẻ quá đà"
+  },
+  {
+    "id": "44",
+    "word": "Perspicuous",
+    "phonetic": "/pərˈspɪkjuəs/",
+    "meaning": "Dễ hiểu; được diễn đạt rõ ràng",
+    "example": "The author wrote in a perspicuous style.",
+    "exampleMeaning": "Tác giả viết theo phong cách dễ hiểu"
+  },
+  {
+    "id": "45",
+    "word": "Ebullient",
+    "phonetic": "/ɪˈbʌliənt/",
+    "meaning": "Hứng khởi, vui vẻ, và đầy hạnh phúc",
+    "example": "She had an ebullient personality that lifted everyone's mood.",
+    "exampleMeaning": "Tính cách vui vẻ của cô ấy đã làm tất cả mọi người cảm thấy tốt hơn"
+  },
+  {
+    "id": "46",
+    "word": "Circumlocution",
+    "phonetic": "/ˌsɜːkəmləˈkjuːʃən/",
+    "meaning": "Sử dụng nhiều từ để diễn tả cái gì có thể được nói đơn giản",
+    "example": "He spoke in circumlocution, never getting to the point.",
+    "exampleMeaning": "Anh ấy nói vòng quanh thay vì nói thẳng vào trọng điểm"
+  },
+  {
+    "id": "47",
+    "word": "Assiduous",
+    "phonetic": "/əˈsɪdjuəs/",
+    "meaning": "Rất chăm chỉ và chú ý; kiên trì",
+    "example": "His assiduous efforts finally paid off.",
+    "exampleMeaning": "Những nỗ lực chăm chỉ của anh ấy cuối cùng đã thành công"
+  },
+  {
+    "id": "48",
+    "word": "Propitious",
+    "phonetic": "/prəˈpɪʃəs/",
+    "meaning": "Cho thấy dấu hiệu của sự thành công trong tương lai; thuận lợi",
+    "example": "The weather looked propitious for the outdoor event.",
+    "exampleMeaning": "Thời tiết có vẻ thuận lợi cho sự kiện ngoài trời"
+  },
+  {
+    "id": "49",
+    "word": "Cogent",
+    "phonetic": "/ˈkəʊdʒənt/",
+    "meaning": "Được lập luận một cách rõ ràng và logic; thuyết phục",
+    "example": "Her cogent argument persuaded the jury.",
+    "exampleMeaning": "Lập luận logic của cô ấy đã thuyết phục bồi thẩm đoàn"
+  },
+  {
+    "id": "50",
+    "word": "Sedulous",
+    "phonetic": "/ˈsedʒuləs/",
+    "meaning": "Chăm chỉ, kỹ lưỡng, và cẩn thận",
+    "example": "The sedulous research took many years to complete.",
+    "exampleMeaning": "Nghiên cứu kỹ lưỡng đó mất nhiều năm để hoàn thành"
+  }
+]

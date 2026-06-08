@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "VocabFlow",
+    "settings": "Settings"
+  },
+  "onboarding": {
+    "heading": "Learn English",
+    "tagline": "Master vocabulary every day. No login. Just learn.",
+    "question": "How many words would you like to learn daily?",
+    "goal10": "10 words",
+    "goal20": "20 words",
+    "goal50": "50 words",
+    "goalUnlimited": "Unlimited",
+    "footer": "Progress syncs automatically. Learn on any device."
+  },
+  "learning": {
+    "rememberButton": "I Remember",
+    "notYetButton": "Not Yet",
+    "definition": "Definition",
+    "example": "Example",
+    "translation": "Translation",
+    "explainButton": "AI Explain",
+    "explainAgain": "Get Another Explanation",
+    "explaining": "Generating...",
+    "aiExplanation": "AI Explanation",
+    "retryExplanation": "Get another explanation",
+    "tryAgain": "Try again"
+  },
+  "completion": {
+    "heading": "Awesome Work!",
+    "subtitle": "Daily Goal Complete",
+    "wordsLearned": "words learned",
+    "reviewQueueLabel": "in review queue",
+    "continueButton": "Continue Learning",
+    "finishButton": "Finish for Today",
+    "streak": "Current Streak"
+  },
+  "settings": {
+    "heading": "Settings",
+    "dailyGoalLabel": "Daily Goal",
+    "themeLabel": "Theme",
+    "darkMode": "Switch to Light Mode",
+    "lightMode": "Switch to Dark Mode",
+    "languageLabel": "Language",
+    "resetButton": "Reset All Progress",
+    "resetConfirm": "Are you sure? This cannot be undone.",
+    "resetCancel": "Cancel",
+    "resetConfirm": "Reset All"
+  },
+  "progressBar": {
+    "of": "of"
+  }
+}

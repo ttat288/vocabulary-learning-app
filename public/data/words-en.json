@@ -1,0 +1,402 @@
+[
+  {
+    "id": "1",
+    "word": "Serendipity",
+    "phonetic": "/ˌserənˈdɪpɪti/",
+    "meaning": "The occurrence of events by chance in a happy or beneficial way",
+    "example": "Finding that old letter was pure serendipity.",
+    "exampleMeaning": "Finding the letter by accident was a fortunate surprise"
+  },
+  {
+    "id": "2",
+    "word": "Ephemeral",
+    "phonetic": "/ɪˈfem(ə)rəl/",
+    "meaning": "Lasting for a very short time; transitory",
+    "example": "The beauty of cherry blossoms is ephemeral.",
+    "exampleMeaning": "Cherry blossoms don't last long before falling"
+  },
+  {
+    "id": "3",
+    "word": "Nostalgia",
+    "phonetic": "/nɒˈstaldʒə/",
+    "meaning": "A sentimental longing for the past; something from the past",
+    "example": "She felt a wave of nostalgia listening to their old songs.",
+    "exampleMeaning": "The songs reminded her of happy memories from before"
+  },
+  {
+    "id": "4",
+    "word": "Ubiquitous",
+    "phonetic": "/juːˈbɪkwɪtəs/",
+    "meaning": "Present, appearing, or found everywhere",
+    "example": "Smartphones have become ubiquitous in modern society.",
+    "exampleMeaning": "Almost everyone has a smartphone nowadays"
+  },
+  {
+    "id": "5",
+    "word": "Mellifluous",
+    "phonetic": "/meˈlɪfluəs/",
+    "meaning": "Sweet or musical; pleasant to hear",
+    "example": "Her mellifluous voice captivated the entire audience.",
+    "exampleMeaning": "Her voice was so beautiful that everyone was enchanted"
+  },
+  {
+    "id": "6",
+    "word": "Sanguine",
+    "phonetic": "/ˈsæŋɡwɪn/",
+    "meaning": "Optimistic or positive in outlook; hopeful",
+    "example": "Despite the challenges, she remained sanguine about the future.",
+    "exampleMeaning": "She stayed hopeful and confident things would improve"
+  },
+  {
+    "id": "7",
+    "word": "Lackadaisical",
+    "phonetic": "/ˌlækəˈdeɪzɪkəl/",
+    "meaning": "Lacking enthusiasm, effort, or care; casual",
+    "example": "He had a lackadaisical approach to his studies.",
+    "exampleMeaning": "He didn't study with much effort or care"
+  },
+  {
+    "id": "8",
+    "word": "Obfuscate",
+    "phonetic": "/ɒbˈfʌskeɪt/",
+    "meaning": "To deliberately make something unclear or hidden",
+    "example": "The politician tried to obfuscate the truth with complex language.",
+    "exampleMeaning": "The politician used complicated words to hide what really happened"
+  },
+  {
+    "id": "9",
+    "word": "Candid",
+    "phonetic": "/ˈkændɪd/",
+    "meaning": "Frank, honest, and straightforward",
+    "example": "He gave a candid opinion about the project's failures.",
+    "exampleMeaning": "He was completely honest about what went wrong"
+  },
+  {
+    "id": "10",
+    "word": "Pragmatic",
+    "phonetic": "/præɡˈmætɪk/",
+    "meaning": "Dealing with things in a practical, realistic way based on actual circumstances",
+    "example": "We need a pragmatic solution, not an idealistic one.",
+    "exampleMeaning": "We need something that actually works, not something that sounds nice"
+  },
+  {
+    "id": "11",
+    "word": "Eloquent",
+    "phonetic": "/ˈeləkwənt/",
+    "meaning": "Fluent, persuasive, and expressive in speaking or writing",
+    "example": "The speaker delivered an eloquent speech about social justice.",
+    "exampleMeaning": "The speaker spoke beautifully and convincingly about making society fairer"
+  },
+  {
+    "id": "12",
+    "word": "Benevolent",
+    "phonetic": "/bəˈnevələnt/",
+    "meaning": "Kind, generous, and helpful",
+    "example": "The benevolent organization donated food to the poor.",
+    "exampleMeaning": "The kind organization gave food to people in need"
+  },
+  {
+    "id": "13",
+    "word": "Nonchalant",
+    "phonetic": "/ˌnɒnʃəˈlɑːnt/",
+    "meaning": "Casual and unconcerned; not anxious",
+    "example": "She had a nonchalant attitude towards the upcoming exam.",
+    "exampleMeaning": "She didn't seem worried about the test at all"
+  },
+  {
+    "id": "14",
+    "word": "Perfunctory",
+    "phonetic": "/pəˈfʌŋktəri/",
+    "meaning": "Done routinely and with minimal effort or reflection",
+    "example": "He gave a perfunctory apology without really meaning it.",
+    "exampleMeaning": "He apologized but it seemed like he was just going through the motions"
+  },
+  {
+    "id": "15",
+    "word": "Alacrity",
+    "phonetic": "/əˈlækrɪti/",
+    "meaning": "Eagerness and enthusiasm; promptness",
+    "example": "She accepted the job offer with alacrity.",
+    "exampleMeaning": "She was very excited and said yes immediately"
+  },
+  {
+    "id": "16",
+    "word": "Ambiguous",
+    "phonetic": "/æmˈbɪɡjuəs/",
+    "meaning": "Open to more than one interpretation; unclear",
+    "example": "The statement was so ambiguous that everyone interpreted it differently.",
+    "exampleMeaning": "The statement could mean many different things"
+  },
+  {
+    "id": "17",
+    "word": "Tangible",
+    "phonetic": "/ˈtændʒɪbəl/",
+    "meaning": "Perceptible by touch; clear and definite",
+    "example": "We need tangible results, not just promises.",
+    "exampleMeaning": "We need real results we can see and measure"
+  },
+  {
+    "id": "18",
+    "word": "Meticulous",
+    "phonetic": "/məˈtɪkjuləs/",
+    "meaning": "Showing great attention to detail; very careful",
+    "example": "She performed the surgery with meticulous precision.",
+    "exampleMeaning": "She was extremely careful and detailed while performing the surgery"
+  },
+  {
+    "id": "19",
+    "word": "Ambivalent",
+    "phonetic": "/æmˈbɪvələnt/",
+    "meaning": "Having mixed feelings or contradictory ideas about something",
+    "example": "I feel ambivalent about moving to a new city.",
+    "exampleMeaning": "I have both good and bad feelings about the move"
+  },
+  {
+    "id": "20",
+    "word": "Indefatigable",
+    "phonetic": "/ˌɪndɪˈfætɪɡəbəl/",
+    "meaning": "Never tiring; tireless and persistent",
+    "example": "She was an indefatigable worker who never complained.",
+    "exampleMeaning": "She worked incredibly hard without ever getting tired or complaining"
+  },
+  {
+    "id": "21",
+    "word": "Somberly",
+    "phonetic": "/ˈsɒmbəli/",
+    "meaning": "In a serious, solemn, or dark manner",
+    "example": "He spoke somberly about the accident.",
+    "exampleMeaning": "He spoke in a serious and grave way about what happened"
+  },
+  {
+    "id": "22",
+    "word": "Vindicate",
+    "phonetic": "/ˈvɪndɪkeɪt/",
+    "meaning": "To clear someone of blame or suspicion; to show to be justified",
+    "example": "The evidence vindicated him of all charges.",
+    "exampleMeaning": "The evidence proved he wasn't guilty"
+  },
+  {
+    "id": "23",
+    "word": "Proliferate",
+    "phonetic": "/prəˈlɪfəreɪt/",
+    "meaning": "To increase in number rapidly; to multiply",
+    "example": "Rumors proliferated after the news announcement.",
+    "exampleMeaning": "Many rumors spread quickly after the news came out"
+  },
+  {
+    "id": "24",
+    "word": "Esoteric",
+    "phonetic": "/ˌesəˈterɪk/",
+    "meaning": "Intended for a small group; obscure and mysterious",
+    "example": "The book was too esoteric for general audiences.",
+    "exampleMeaning": "The book was so specialized and mysterious that most people wouldn't understand it"
+  },
+  {
+    "id": "25",
+    "word": "Venerate",
+    "phonetic": "/ˈvenəreɪt/",
+    "meaning": "To regard with respect and reverence",
+    "example": "Many people venerate historical leaders.",
+    "exampleMeaning": "Many people greatly respect and honor historical leaders"
+  },
+  {
+    "id": "26",
+    "word": "Ameliorate",
+    "phonetic": "/əˈmiːliəreɪt/",
+    "meaning": "To make something better; to improve",
+    "example": "New policies helped ameliorate the housing crisis.",
+    "exampleMeaning": "New policies helped improve the housing situation"
+  },
+  {
+    "id": "27",
+    "word": "Cacophony",
+    "phonetic": "/kəˈkɒfəni/",
+    "meaning": "A harsh, unpleasant mixture of sounds",
+    "example": "The construction site was a cacophony of noise.",
+    "exampleMeaning": "The construction site was filled with loud, unpleasant sounds"
+  },
+  {
+    "id": "28",
+    "word": "Diffident",
+    "phonetic": "/ˈdɪfɪdənt/",
+    "meaning": "Lacking confidence in oneself; shy",
+    "example": "The diffident student rarely raised their hand in class.",
+    "exampleMeaning": "The shy student almost never spoke up in class"
+  },
+  {
+    "id": "29",
+    "word": "Sagacious",
+    "phonetic": "/səˈɡeɪʃəs/",
+    "meaning": "Having or showing keen judgment; wise",
+    "example": "Her sagacious advice helped us make the right decision.",
+    "exampleMeaning": "Her wise advice helped us choose correctly"
+  },
+  {
+    "id": "30",
+    "word": "Perspicacious",
+    "phonetic": "/ˌpɜːspɪˈkeɪʃəs/",
+    "meaning": "Having keen insight and understanding; discerning",
+    "example": "The critic made perspicacious observations about the film.",
+    "exampleMeaning": "The critic had sharp, insightful things to say about the movie"
+  },
+  {
+    "id": "31",
+    "word": "Pallid",
+    "phonetic": "/ˈpælɪd/",
+    "meaning": "Pale; lacking color or vigor",
+    "example": "He looked pallid after the long illness.",
+    "exampleMeaning": "He looked very pale and weak after being sick for so long"
+  },
+  {
+    "id": "32",
+    "word": "Fervent",
+    "phonetic": "/ˈfɜːrvənt/",
+    "meaning": "Passionate, intense, and enthusiastic",
+    "example": "She was a fervent supporter of environmental causes.",
+    "exampleMeaning": "She was very passionate about protecting the environment"
+  },
+  {
+    "id": "33",
+    "word": "Lugubrious",
+    "phonetic": "/luːˈɡuːbriəs/",
+    "meaning": "Mournful, dismal, or gloomy",
+    "example": "The lugubrious music perfectly matched the sad film.",
+    "exampleMeaning": "The sad music went perfectly with the unhappy movie"
+  },
+  {
+    "id": "34",
+    "word": "Incisive",
+    "phonetic": "/ɪnˈsaɪsɪv/",
+    "meaning": "Sharp and clear in intellect; penetrating",
+    "example": "The professor gave an incisive analysis of the problem.",
+    "exampleMeaning": "The professor analyzed the problem in a sharp and clear way"
+  },
+  {
+    "id": "35",
+    "word": "Docile",
+    "phonetic": "/ˈdɒsaɪl/",
+    "meaning": "Obedient and easily taught",
+    "example": "The docile dog followed every command.",
+    "exampleMeaning": "The obedient dog did exactly what was asked"
+  },
+  {
+    "id": "36",
+    "word": "Pungent",
+    "phonetic": "/ˈpʌndʒənt/",
+    "meaning": "Having a strong, sharp smell or taste",
+    "example": "The pungent odor of garlic filled the kitchen.",
+    "exampleMeaning": "The strong smell of garlic spread throughout the kitchen"
+  },
+  {
+    "id": "37",
+    "word": "Impeccable",
+    "phonetic": "/ɪmˈpekəbəl/",
+    "meaning": "Flawless; without any faults or errors",
+    "example": "His impeccable manners impressed everyone.",
+    "exampleMeaning": "His perfect behavior impressed everyone"
+  },
+  {
+    "id": "38",
+    "word": "Querulous",
+    "phonetic": "/ˈkwerələs/",
+    "meaning": "Complaining in an irritating way",
+    "example": "She had a querulous tone when discussing the service.",
+    "exampleMeaning": "She complained constantly about the service in an annoying way"
+  },
+  {
+    "id": "39",
+    "word": "Gregarious",
+    "phonetic": "/ɡrɪˈɡeəriəs/",
+    "meaning": "Fond of being in the company of others; social",
+    "example": "Being gregarious, he enjoyed large parties.",
+    "exampleMeaning": "Because he liked being around people, he enjoyed big parties"
+  },
+  {
+    "id": "40",
+    "word": "Phlegmatic",
+    "phonetic": "/fleɡˈmætɪk/",
+    "meaning": "Calm and unemotional; not easily disturbed",
+    "example": "He had a phlegmatic response to the bad news.",
+    "exampleMeaning": "He stayed calm and didn't react emotionally to the bad news"
+  },
+  {
+    "id": "41",
+    "word": "Transient",
+    "phonetic": "/ˈtrænziənt/",
+    "meaning": "Temporary; lasting for a short time",
+    "example": "The joy of winning was transient.",
+    "exampleMeaning": "The happiness from winning didn't last very long"
+  },
+  {
+    "id": "42",
+    "word": "Pellucid",
+    "phonetic": "/pəˈluːsɪd/",
+    "meaning": "Clear, transparent, or easily understood",
+    "example": "The instructions were pellucid and easy to follow.",
+    "exampleMeaning": "The instructions were very clear and simple to understand"
+  },
+  {
+    "id": "43",
+    "word": "Ostentatious",
+    "phonetic": "/ˌɒstenˈteɪʃəs/",
+    "meaning": "Designed to impress or attract attention; showy",
+    "example": "His ostentatious jewelry seemed overdone.",
+    "exampleMeaning": "His flashy jewelry seemed like too much"
+  },
+  {
+    "id": "44",
+    "word": "Perspicuous",
+    "phonetic": "/pərˈspɪkjuəs/",
+    "meaning": "Easy to understand; clearly expressed",
+    "example": "The author wrote in a perspicuous style.",
+    "exampleMeaning": "The author wrote in a way that was easy to understand"
+  },
+  {
+    "id": "45",
+    "word": "Ebullient",
+    "phonetic": "/ɪˈbʌliənt/",
+    "meaning": "Enthusiastic, cheerful, and full of excitement",
+    "example": "She had an ebullient personality that lifted everyone's mood.",
+    "exampleMeaning": "Her happy, energetic personality made everyone feel better"
+  },
+  {
+    "id": "46",
+    "word": "Circumlocution",
+    "phonetic": "/ˌsɜːkəmləˈkjuːʃən/",
+    "meaning": "The use of many words to express something that could be said simply",
+    "example": "He spoke in circumlocution, never getting to the point.",
+    "exampleMeaning": "He talked around the subject instead of saying what he meant"
+  },
+  {
+    "id": "47",
+    "word": "Assiduous",
+    "phonetic": "/əˈsɪdjuəs/",
+    "meaning": "Very diligent and attentive; persistent",
+    "example": "His assiduous efforts finally paid off.",
+    "exampleMeaning": "His hard work and dedication finally resulted in success"
+  },
+  {
+    "id": "48",
+    "word": "Propitious",
+    "phonetic": "/prəˈpɪʃəs/",
+    "meaning": "Giving signs of future success; favorable",
+    "example": "The weather looked propitious for the outdoor event.",
+    "exampleMeaning": "The weather seemed like it would be good for the outdoor event"
+  },
+  {
+    "id": "49",
+    "word": "Cogent",
+    "phonetic": "/ˈkəʊdʒənt/",
+    "meaning": "Clearly and logically argued; convincing",
+    "example": "Her cogent argument persuaded the jury.",
+    "exampleMeaning": "Her logical and clear argument convinced the jury"
+  },
+  {
+    "id": "50",
+    "word": "Sedulous",
+    "phonetic": "/ˈsedʒuləs/",
+    "meaning": "Diligent, painstaking, and careful",
+    "example": "The sedulous research took many years to complete.",
+    "exampleMeaning": "The careful, detailed research took many years"
+  }
+]
