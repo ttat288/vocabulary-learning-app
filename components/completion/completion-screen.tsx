@@ -1,6 +1,12 @@
 'use client';
 
+import type React from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight, CheckCircle2, Clock3, Trophy } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslations } from '@/hooks/use-translations';
 
 interface CompletionScreenProps {
@@ -18,90 +24,75 @@ export function CompletionScreen({
 }: CompletionScreenProps) {
   const t = useTranslations();
 
-  const containerVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.34, 1.56, 0.64, 1],
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: 'easeOut' },
-    },
-  };
-
   return (
     <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className="flex flex-col items-center justify-center h-full px-4 py-12 text-center"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className='flex h-full min-h-0 items-center justify-center py-6'
     >
-      {/* Celebration emoji */}
-      <motion.div
-        variants={itemVariants}
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-        className="text-8xl mb-8"
-      >
-        🎉
-      </motion.div>
+      <Card className='w-full max-w-3xl'>
+        <CardHeader className='text-center'>
+          <div className='mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary'>
+            <Trophy className='h-6 w-6' />
+          </div>
+          <Badge variant='outline' className='mx-auto mb-2'>
+            {t('completion.subtitle')}
+          </Badge>
+          <CardTitle className='text-3xl sm:text-4xl'>
+            {t('completion.heading')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='space-y-5'>
+          <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+            <StatCard
+              icon={<CheckCircle2 className='h-5 w-5' />}
+              label={t('completion.wordsLearned')}
+              value={wordsLearned}
+            />
+            <StatCard
+              icon={<Clock3 className='h-5 w-5' />}
+              label={t('completion.reviewQueueLabel')}
+              value={reviewQueueSize}
+            />
+          </div>
 
-      {/* Congratulations */}
-      <motion.h1 variants={itemVariants} className="text-5xl md:text-6xl font-bold text-foreground mb-4">
-        {t('completion.heading')}
-      </motion.h1>
-
-      <motion.p variants={itemVariants} className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl">
-        {t('completion.subtitle')}
-      </motion.p>
-
-      {/* Stats */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12 w-full max-w-2xl">
-        <div className="bg-card border border-border rounded-xl p-6">
-          <p className="text-muted-foreground text-sm mb-2">{t('completion.wordsLearned')}</p>
-          <p className="text-4xl font-bold text-primary">{wordsLearned}</p>
-        </div>
-        
-        <div className="bg-card border border-border rounded-xl p-6">
-          <p className="text-muted-foreground text-sm mb-2">{t('completion.reviewQueueLabel')}</p>
-          <p className="text-4xl font-bold text-accent">{reviewQueueSize}</p>
-        </div>
-      </motion.div>
-
-      {/* Actions */}
-      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
-        <motion.button
-          onClick={onFinish}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="flex-1 px-6 py-4 rounded-lg font-semibold text-base transition-all duration-200
-                     bg-card border-2 border-border text-foreground hover:border-primary hover:text-primary"
-        >
-          {t('completion.finishButton')}
-        </motion.button>
-        
-        <motion.button
-          onClick={onContinue}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="flex-1 px-6 py-4 rounded-lg font-semibold text-base transition-all duration-200
-                     bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg"
-        >
-          {t('completion.continueButton')}
-        </motion.button>
-      </motion.div>
+          <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+            <Button type='button' variant='outline' size='lg' onClick={onFinish}>
+              {t('completion.finishButton')}
+            </Button>
+            <Button
+              type='button'
+              size='lg'
+              onClick={onContinue}
+              className='gap-2'
+            >
+              {t('completion.continueButton')}
+              <ArrowRight className='h-4 w-4' />
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
+  );
+}
+
+function StatCard({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+}) {
+  return (
+    <div className='rounded-xl border border-border bg-background/60 p-4'>
+      <div className='mb-3 flex items-center gap-2 text-sm text-muted-foreground'>
+        <span className='text-primary'>{icon}</span>
+        {label}
+      </div>
+      <p className='text-3xl font-semibold text-foreground'>{value}</p>
+    </div>
   );
 }

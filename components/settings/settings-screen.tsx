@@ -1,10 +1,15 @@
 'use client';
 
+import type React from 'react';
 import { motion } from 'framer-motion';
-import { useTranslations } from '@/hooks/use-translations';
+import { Bot, Globe2, RotateCcw, Settings, SunMoon, Target, X } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
 import { useLanguage } from '@/contexts/language-context';
-import { getLanguageLabel } from '@/lib/i18n';
-import { UserProgress, DailyGoal } from '@/lib/types';
+import { useTranslations } from '@/hooks/use-translations';
+import { UserProgress } from '@/lib/types';
 import type { Language } from '@/lib/i18n';
 
 interface SettingsScreenProps {
@@ -21,9 +26,9 @@ const DAILY_GOAL_OPTIONS: { value: number; labelKey: string }[] = [
   { value: 50, labelKey: 'onboarding.goal50' },
 ];
 
-const LANGUAGE_OPTIONS: { value: Language; label: string }[] = [
-  { value: 'en', label: 'English' },
-  { value: 'vi', label: 'Tiếng Việt' },
+const LANGUAGE_OPTIONS: { value: Language; labelKey: string }[] = [
+  { value: 'en', labelKey: 'settings.languageEnglish' },
+  { value: 'vi', labelKey: 'settings.languageVietnamese' },
 ];
 
 export function SettingsScreen({
@@ -35,6 +40,7 @@ export function SettingsScreen({
 }: SettingsScreenProps) {
   const t = useTranslations();
   const { language, setLanguage } = useLanguage();
+  const aiEnabled = progress.aiEnabled ?? true;
 
   const handleReset = () => {
     if (window.confirm(t('settings.resetConfirm'))) {
@@ -43,102 +49,156 @@ export function SettingsScreen({
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.3 },
-    },
+  const handleToggleAi = (enabled: boolean) => {
+    window.dispatchEvent(new CustomEvent('toggleAi', { detail: { enabled } }));
   };
 
   return (
     <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className='fixed inset-0 z-50 overflow-y-auto bg-background/80 p-3 backdrop-blur-sm sm:p-4'
       onClick={onClose}
     >
-      <motion.div
-        onClick={(e) => e.stopPropagation()}
-        className="bg-card border border-border rounded-2xl p-8 max-w-md w-full shadow-2xl"
-      >
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold text-foreground">{t('settings.heading')}</h2>
-          <button
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Daily Goal Setting */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-foreground mb-4">{t('settings.dailyGoalLabel')}</h3>
-          <div className="space-y-2">
-            {DAILY_GOAL_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => onUpdateGoal(option.value)}
-                className={`w-full px-4 py-3 rounded-lg transition-all duration-200 text-left font-medium
-                  ${
-                    progress.dailyGoal === option.value
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card border border-border text-foreground hover:border-primary'
-                  }`}
-              >
-                {t(option.labelKey)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Theme Toggle */}
-        <div className="mb-8 pb-8 border-b border-border">
-          <h3 className="text-lg font-semibold text-foreground mb-4">{t('settings.themeLabel')}</h3>
-          <button
-            onClick={onToggleTheme}
-            className="w-full px-4 py-3 rounded-lg bg-card border border-border text-foreground
-                       hover:border-primary transition-all duration-200 font-medium"
-          >
-            {progress.theme === 'dark' ? t('settings.lightMode') : t('settings.darkMode')}
-          </button>
-        </div>
-
-        {/* Language Selection */}
-        <div className="mb-8 pb-8 border-b border-border">
-          <h3 className="text-lg font-semibold text-foreground mb-4">{t('settings.languageLabel')}</h3>
-          <div className="space-y-2">
-            {LANGUAGE_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => setLanguage(option.value)}
-                className={`w-full px-4 py-3 rounded-lg transition-all duration-200 text-left font-medium
-                  ${
-                    language === option.value
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card border border-border text-foreground hover:border-primary'
-                  }`}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Reset Button */}
-        <motion.button
-          onClick={handleReset}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-500
-                     hover:bg-red-500/20 transition-all duration-200 font-medium"
+      <div className='flex min-h-full items-center justify-center'>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98, y: 8 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.22 }}
+          onClick={(event) => event.stopPropagation()}
+          className='w-full max-w-4xl'
         >
-          {t('settings.resetButton')}
-        </motion.button>
-      </motion.div>
+          <Card className='max-h-[calc(100dvh-1.5rem)] overflow-hidden'>
+            <CardHeader className='border-b border-border p-4 sm:p-5'>
+              <div className='flex items-center justify-between gap-4'>
+                <CardTitle className='flex items-center gap-2 text-xl'>
+                  <Settings className='h-5 w-5 text-primary' />
+                  {t('settings.heading')}
+                </CardTitle>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='icon'
+                  onClick={onClose}
+                  aria-label='Close settings'
+                >
+                  <X className='h-4 w-4' />
+                </Button>
+              </div>
+            </CardHeader>
+
+            <CardContent className='max-h-[calc(100dvh-6rem)] overflow-auto p-4 sm:p-5'>
+              <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                <SettingsSection
+                  icon={<Target className='h-4 w-4' />}
+                  title={t('settings.dailyGoalLabel')}
+                >
+                  <div className='grid grid-cols-3 gap-2'>
+                    {DAILY_GOAL_OPTIONS.map((option) => (
+                      <Button
+                        key={option.value}
+                        type='button'
+                        variant={
+                          progress.dailyGoal === option.value
+                            ? 'default'
+                            : 'outline'
+                        }
+                        onClick={() => onUpdateGoal(option.value)}
+                        className='w-full'
+                      >
+                        {t(option.labelKey)}
+                      </Button>
+                    ))}
+                  </div>
+                </SettingsSection>
+
+                <SettingsSection
+                  icon={<SunMoon className='h-4 w-4' />}
+                  title={t('settings.themeLabel')}
+                >
+                  <Button
+                    type='button'
+                    variant='outline'
+                    onClick={onToggleTheme}
+                    className='w-full justify-start'
+                  >
+                    {progress.theme === 'dark'
+                      ? t('settings.lightMode')
+                      : t('settings.darkMode')}
+                  </Button>
+                </SettingsSection>
+
+                <SettingsSection
+                  icon={<Globe2 className='h-4 w-4' />}
+                  title={t('settings.languageLabel')}
+                >
+                  <div className='grid grid-cols-2 gap-2'>
+                    {LANGUAGE_OPTIONS.map((option) => (
+                      <Button
+                        key={option.value}
+                        type='button'
+                        variant={
+                          language === option.value ? 'default' : 'outline'
+                        }
+                        onClick={() => setLanguage(option.value)}
+                      >
+                        {t(option.labelKey)}
+                      </Button>
+                    ))}
+                  </div>
+                </SettingsSection>
+
+                <SettingsSection icon={<Bot className='h-4 w-4' />} title='AI'>
+                  <div className='flex items-center justify-between gap-4 rounded-lg border border-border bg-background/60 p-3'>
+                    <span className='text-sm font-medium text-foreground'>
+                      AI
+                    </span>
+                    <Switch
+                      checked={aiEnabled}
+                      onCheckedChange={handleToggleAi}
+                      aria-label='Toggle AI'
+                    />
+                  </div>
+                </SettingsSection>
+
+                <div className='md:col-span-2'>
+                  <Button
+                    type='button'
+                    variant='destructive'
+                    onClick={handleReset}
+                    className='w-full gap-2'
+                  >
+                    <RotateCcw className='h-4 w-4' />
+                    {t('settings.resetButton')}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </motion.div>
+  );
+}
+
+function SettingsSection({
+  icon,
+  title,
+  children,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className='rounded-xl border border-border bg-background/50 p-4'>
+      <div className='mb-3 flex items-center gap-2 text-sm font-semibold text-foreground'>
+        <span className='text-primary'>{icon}</span>
+        {title}
+      </div>
+      {children}
+    </section>
   );
 }

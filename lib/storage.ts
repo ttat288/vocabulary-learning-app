@@ -1,5 +1,9 @@
 import { UserProgress, Word } from './types';
-import { STORAGE_KEY, WORDS_STORAGE_KEY, DEFAULT_DAILY_GOAL } from './constants';
+import {
+  STORAGE_KEY,
+  WORDS_STORAGE_KEY,
+  DEFAULT_DAILY_GOAL,
+} from './constants';
 
 const DEFAULT_PROGRESS: UserProgress = {
   dailyGoal: DEFAULT_DAILY_GOAL,
@@ -8,15 +12,16 @@ const DEFAULT_PROGRESS: UserProgress = {
   reviewQueue: [],
   lastStudyDate: new Date().toISOString().split('T')[0],
   theme: 'dark',
+  aiEnabled: true,
 };
 
 export function getProgress(): UserProgress {
   if (typeof window === 'undefined') return DEFAULT_PROGRESS;
-  
+
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return DEFAULT_PROGRESS;
-    
+
     const parsed = JSON.parse(stored);
     return { ...DEFAULT_PROGRESS, ...parsed };
   } catch (e) {
@@ -27,7 +32,7 @@ export function getProgress(): UserProgress {
 
 export function saveProgress(progress: UserProgress): void {
   if (typeof window === 'undefined') return;
-  
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   } catch (e) {
@@ -37,7 +42,7 @@ export function saveProgress(progress: UserProgress): void {
 
 export function getWords(language: string = 'en'): Word[] {
   if (typeof window === 'undefined') return [];
-  
+
   try {
     const key = `${WORDS_STORAGE_KEY}-${language}`;
     const stored = localStorage.getItem(key);
@@ -47,13 +52,13 @@ export function getWords(language: string = 'en'): Word[] {
   } catch (e) {
     console.error('[v0] Error parsing cached words:', e);
   }
-  
+
   return [];
 }
 
 export function saveWords(words: Word[], language: string = 'en'): void {
   if (typeof window === 'undefined') return;
-  
+
   try {
     const key = `${WORDS_STORAGE_KEY}-${language}`;
     localStorage.setItem(key, JSON.stringify(words));

@@ -1,17 +1,19 @@
 {
   "common": {
     "appName": "VocabFlow",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "subtitle": "Luyện từ vựng"
   },
   "onboarding": {
     "heading": "Học Tiếng Anh",
-    "tagline": "Nắm vững từ vựng hàng ngày. Không cần đăng nhập. Chỉ cần học.",
+    "tagline": "Nắm vững từ vựng hằng ngày. Không cần đăng nhập. Chỉ cần học.",
     "question": "Bạn muốn học bao nhiêu từ mỗi ngày?",
     "goal10": "10 từ",
     "goal20": "20 từ",
     "goal50": "50 từ",
     "goalUnlimited": "Không giới hạn",
-    "footer": "Tiến độ được đồng bộ hóa tự động. Học trên bất kỳ thiết bị nào."
+    "footer": "Tiến độ được đồng bộ hóa tự động. Học trên bất kỳ thiết bị nào.",
+    "startButton": "Bắt đầu"
   },
   "learning": {
     "rememberButton": "Tôi Nhớ",
@@ -23,12 +25,13 @@
     "explainAgain": "Xin Giải Thích Khác",
     "explaining": "Đang Tạo...",
     "aiExplanation": "Giải Thích AI",
+    "aiReady": "Sẵn sàng",
     "retryExplanation": "Xin giải thích khác",
     "tryAgain": "Thử lại"
   },
   "completion": {
     "heading": "Tuyệt Vời!",
-    "subtitle": "Hoàn Thành Mục Tiêu Hàng Ngày",
+    "subtitle": "Hoàn Thành Mục Tiêu Hằng Ngày",
     "wordsLearned": "từ đã học",
     "reviewQueueLabel": "cần ôn lại",
     "continueButton": "Tiếp Tục Học",
@@ -37,17 +40,23 @@
   },
   "settings": {
     "heading": "Cài Đặt",
-    "dailyGoalLabel": "Mục Tiêu Hàng Ngày",
+    "dailyGoalLabel": "Mục Tiêu Hằng Ngày",
     "themeLabel": "Giao Diện",
     "darkMode": "Chuyển Sang Sáng",
     "lightMode": "Chuyển Sang Tối",
     "languageLabel": "Ngôn Ngữ",
+    "languageEnglish": "English",
+    "languageVietnamese": "Tiếng Việt",
+    "aiOn": "AI đang bật",
+    "aiOff": "AI đang tắt",
+    "enableAi": "Bật AI",
+    "disableAi": "Tắt AI",
     "resetButton": "Đặt Lại Tất Cả Tiến Độ",
     "resetConfirm": "Bạn chắc chứ? Hành động này không thể hoàn tác.",
-    "resetCancel": "Hủy",
-    "resetConfirm": "Đặt Lại"
+    "resetCancel": "Hủy"
   },
   "progressBar": {
+    "label": "Tiến độ",
     "of": "trên"
   }
 }

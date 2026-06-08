@@ -1,6 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ArrowRight, Gauge, Infinity, Layers, Zap } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { useTranslations } from '@/hooks/use-translations';
 
 interface OnboardingScreenProps {
@@ -8,85 +12,76 @@ interface OnboardingScreenProps {
 }
 
 const GOALS = [
-  { value: 10, labelKey: 'onboarding.goal10', descriptionKey: 'Quick daily boost' },
-  { value: 20, labelKey: 'onboarding.goal20', descriptionKey: 'Standard practice' },
-  { value: 50, labelKey: 'onboarding.goal50', descriptionKey: 'Deep dive' },
-  { value: 'unlimited', labelKey: 'onboarding.goalUnlimited', descriptionKey: 'Keep learning' },
-];
+  { value: 10, labelKey: 'onboarding.goal10', icon: Zap },
+  { value: 20, labelKey: 'onboarding.goal20', icon: Gauge },
+  { value: 50, labelKey: 'onboarding.goal50', icon: Layers },
+  { value: 'unlimited', labelKey: 'onboarding.goalUnlimited', icon: Infinity },
+] as const;
 
 export function OnboardingScreen({ onSelectGoal }: OnboardingScreenProps) {
   const t = useTranslations();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: 'easeOut' },
-    },
-  };
-
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className="flex flex-col items-center justify-center h-screen px-4 py-12 text-center overflow-hidden"
-    >
-      {/* Header */}
-      <motion.div variants={itemVariants} className="mb-16">
-        <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-4">
-          {t('onboarding.heading')}
-        </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground">
-          {t('onboarding.tagline')}
-        </p>
-      </motion.div>
-
-      {/* Goal Selection */}
-      <motion.div variants={itemVariants} className="w-full max-w-4xl mb-12">
-        <p className="text-lg text-muted-foreground mb-8">
-          {t('onboarding.question')}
-        </p>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {GOALS.map((goal) => (
-            <motion.button
-              key={String(goal.value)}
-              onClick={() => onSelectGoal(goal.value)}
-              whileHover={{ scale: 1.05, translateY: -4 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative group"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-xl opacity-0 group-hover:opacity-20 blur transition-opacity duration-300" />
-              <div className="relative bg-card border border-border rounded-xl p-6 transition-all duration-300 group-hover:border-primary group-hover:shadow-lg">
-                <div className="text-3xl font-bold text-primary mb-2">
-                  {t(goal.labelKey)}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {goal.descriptionKey}
-                </p>
-              </div>
-            </motion.button>
-          ))}
+    <main className='flex min-h-screen items-center justify-center px-4 py-8'>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className='w-full max-w-5xl'
+      >
+        <div className='mb-8 max-w-2xl'>
+          <Badge variant='outline' className='mb-4'>
+            VocabFlow
+          </Badge>
+          <h1 className='text-4xl font-semibold tracking-normal text-foreground sm:text-5xl'>
+            {t('onboarding.heading')}
+          </h1>
+          <p className='mt-3 text-base leading-7 text-muted-foreground sm:text-lg'>
+            {t('onboarding.tagline')}
+          </p>
         </div>
-      </motion.div>
 
-      {/* Footer */}
-      <motion.div variants={itemVariants} className="text-sm text-muted-foreground">
-        <p>{t('onboarding.footer')}</p>
+        <Card>
+          <CardContent className='p-4 sm:p-5'>
+            <div className='mb-4 flex items-center justify-between gap-4'>
+              <p className='text-sm font-medium text-foreground'>
+                {t('onboarding.question')}
+              </p>
+            </div>
+
+            <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4'>
+              {GOALS.map((goal) => {
+                const Icon = goal.icon;
+                return (
+                  <button
+                    key={String(goal.value)}
+                    type='button'
+                    onClick={() => onSelectGoal(goal.value)}
+                    className='group rounded-xl border border-border bg-background/70 p-4 text-left transition-colors hover:border-primary hover:bg-muted/60'
+                  >
+                    <div className='mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
+                      <Icon className='h-5 w-5' />
+                    </div>
+                    <p className='font-semibold text-foreground'>
+                      {t(goal.labelKey)}
+                    </p>
+                    <div className='mt-4'>
+                      <span className='inline-flex items-center gap-2 text-sm font-medium text-primary'>
+                        {t('onboarding.startButton')}
+                        <ArrowRight className='h-4 w-4 transition-transform group-hover:translate-x-0.5' />
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        <p className='mt-5 text-sm text-muted-foreground'>
+          {t('onboarding.footer')}
+        </p>
       </motion.div>
-    </motion.div>
+    </main>
   );
 }

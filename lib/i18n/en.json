@@ -1,7 +1,8 @@
 {
   "common": {
     "appName": "VocabFlow",
-    "settings": "Settings"
+    "settings": "Settings",
+    "subtitle": "Vocabulary practice"
   },
   "onboarding": {
     "heading": "Learn English",
@@ -11,7 +12,8 @@
     "goal20": "20 words",
     "goal50": "50 words",
     "goalUnlimited": "Unlimited",
-    "footer": "Progress syncs automatically. Learn on any device."
+    "footer": "Progress syncs automatically. Learn on any device.",
+    "startButton": "Start"
   },
   "learning": {
     "rememberButton": "I Remember",
@@ -23,6 +25,7 @@
     "explainAgain": "Get Another Explanation",
     "explaining": "Generating...",
     "aiExplanation": "AI Explanation",
+    "aiReady": "Ready",
     "retryExplanation": "Get another explanation",
     "tryAgain": "Try again"
   },
@@ -42,12 +45,18 @@
     "darkMode": "Switch to Light Mode",
     "lightMode": "Switch to Dark Mode",
     "languageLabel": "Language",
+    "languageEnglish": "English",
+    "languageVietnamese": "Vietnamese",
+    "aiOn": "AI is on",
+    "aiOff": "AI is off",
+    "enableAi": "Turn on AI",
+    "disableAi": "Turn off AI",
     "resetButton": "Reset All Progress",
     "resetConfirm": "Are you sure? This cannot be undone.",
-    "resetCancel": "Cancel",
-    "resetConfirm": "Reset All"
+    "resetCancel": "Cancel"
   },
   "progressBar": {
+    "label": "Progress",
     "of": "of"
   }
 }

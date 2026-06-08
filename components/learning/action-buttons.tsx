@@ -1,42 +1,58 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Check, RotateCcw } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
 import { useTranslations } from '@/hooks/use-translations';
 
 interface ActionButtonsProps {
   onRemember: () => void;
   onNotRemember: () => void;
   isLoading?: boolean;
+  aiEnabled?: boolean;
 }
 
-export function ActionButtons({ onRemember, onNotRemember, isLoading = false }: ActionButtonsProps) {
+export function ActionButtons({
+  onRemember,
+  onNotRemember,
+  isLoading = false,
+  aiEnabled = true,
+}: ActionButtonsProps) {
   const t = useTranslations();
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 w-full max-w-2xl mx-auto">
-      <motion.button
-        onClick={onNotRemember}
-        disabled={isLoading}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="flex-1 px-6 py-4 rounded-lg font-semibold text-base transition-all duration-200 
-                   bg-card border-2 border-border text-foreground hover:border-accent hover:text-accent
-                   disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {t('learning.notYetButton')}
-      </motion.button>
-      
-      <motion.button
-        onClick={onRemember}
-        disabled={isLoading}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="flex-1 px-6 py-4 rounded-lg font-semibold text-base transition-all duration-200
-                   bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg
-                   disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {t('learning.rememberButton')}
-      </motion.button>
+    <div
+      className={`grid w-full grid-cols-1 gap-3 sm:grid-cols-2 ${
+        aiEnabled ? 'mx-auto max-w-6xl' : 'mx-auto max-w-full'
+      }`}
+    >
+      <motion.div whileTap={{ scale: 0.99 }}>
+        <Button
+          type='button'
+          variant='outline'
+          size='lg'
+          onClick={onNotRemember}
+          disabled={isLoading}
+          className='h-11 w-full justify-center gap-2 border-border bg-card text-foreground hover:border-accent hover:text-accent'
+        >
+          <RotateCcw className='h-4 w-4' aria-hidden='true' />
+          {t('learning.notYetButton')}
+        </Button>
+      </motion.div>
+
+      <motion.div whileTap={{ scale: 0.99 }}>
+        <Button
+          type='button'
+          size='lg'
+          onClick={onRemember}
+          disabled={isLoading}
+          className='h-11 w-full justify-center gap-2'
+        >
+          <Check className='h-4 w-4' aria-hidden='true' />
+          {t('learning.rememberButton')}
+        </Button>
+      </motion.div>
     </div>
   );
 }

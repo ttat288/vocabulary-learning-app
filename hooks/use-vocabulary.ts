@@ -2,8 +2,16 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Word, UserProgress, ReviewQueueItem } from '@/lib/types';
-import { getProgress, saveProgress, getWords, saveWords, getToday, isNewDay } from '@/lib/storage';
+import {
+  getProgress,
+  saveProgress,
+  getWords,
+  saveWords,
+  getToday,
+  isNewDay,
+} from '@/lib/storage';
 import { useLanguage } from '@/contexts/language-context';
+import { explainCache } from '@/lib/explain-cache';
 
 export function useVocabulary() {
   const [words, setWords] = useState<Word[]>([]);
@@ -31,7 +39,7 @@ export function useVocabulary() {
           ...currentProgress,
           learnedToday: 0,
           lastStudyDate: getToday(),
-          reviewQueue: currentProgress.reviewQueue.map(item => ({
+          reviewQueue: currentProgress.reviewQueue.map((item) => ({
             ...item,
             reviewedCount: Math.max(0, item.reviewedCount - 1),
           })),
@@ -45,6 +53,33 @@ export function useVocabulary() {
     init();
   }, [language]);
 
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent)?.detail;
+      if (!detail || typeof detail.enabled !== 'boolean') return;
+
+      setProgress((previousProgress) => {
+        const baseProgress = previousProgress ?? getProgress();
+        const updatedProgress = {
+          ...baseProgress,
+          aiEnabled: detail.enabled,
+        };
+
+        saveProgress(updatedProgress);
+
+        if (!detail.enabled) {
+          explainCache.clear();
+        }
+
+        return updatedProgress;
+      });
+    };
+
+    window.addEventListener('toggleAi', handler as EventListener);
+    return () =>
+      window.removeEventListener('toggleAi', handler as EventListener);
+  }, []);
+
   // Update current word when progress or words change
   useEffect(() => {
     if (!progress || words.length === 0) {
@@ -52,18 +87,33 @@ export function useVocabulary() {
       return;
     }
 
-    // If review queue has items, show the first one
+    // Ensure review queue references valid words from the current language list.
+    const validReviewQueue = progress.reviewQueue.filter((item) =>
+      words.some((word) => word.id === item.wordId),
+    );
+
+    if (validReviewQueue.length !== progress.reviewQueue.length) {
+      const updatedProgress = { ...progress, reviewQueue: validReviewQueue };
+      saveProgress(updatedProgress);
+      setProgress(updatedProgress);
+      return;
+    }
+
+    let nextWord: Word | null = null;
+
     if (progress.reviewQueue.length > 0) {
       const reviewItem = progress.reviewQueue[0];
-      const word = words.find(w => w.id === reviewItem.wordId);
-      setCurrentWord(word || null);
-    } else {
-      // Get next word from main list (first word not completed)
-      const availableWords = words.filter(
-        w => !progress.completedWords.includes(w.id)
-      );
-      setCurrentWord(availableWords[0] || null);
+      nextWord = words.find((w) => w.id === reviewItem.wordId) || null;
     }
+
+    if (!nextWord) {
+      const availableWords = words.filter(
+        (w) => !progress.completedWords.includes(w.id),
+      );
+      nextWord = availableWords[0] || null;
+    }
+
+    setCurrentWord(nextWord);
   }, [progress, words]);
 
   const markAsRemembered = useCallback(() => {
@@ -73,7 +123,7 @@ export function useVocabulary() {
 
     // Remove from review queue if present
     updatedProgress.reviewQueue = updatedProgress.reviewQueue.filter(
-      item => item.wordId !== currentWord.id
+      (item) => item.wordId !== currentWord.id,
     );
 
     // Add to completed words if not already there
@@ -93,7 +143,7 @@ export function useVocabulary() {
 
     // Add to review queue or update review count
     const existingIndex = updatedProgress.reviewQueue.findIndex(
-      item => item.wordId === currentWord.id
+      (item) => item.wordId === currentWord.id,
     );
 
     if (existingIndex >= 0) {
@@ -121,17 +171,21 @@ export function useVocabulary() {
       reviewQueue: [],
       lastStudyDate: getToday(),
       theme: progress?.theme || 'dark',
+      aiEnabled: progress?.aiEnabled ?? true,
     };
     saveProgress(newProgress);
     setProgress(newProgress);
   }, [progress]);
 
-  const updateDailyGoal = useCallback((goal: number) => {
-    if (!progress) return;
-    const updated = { ...progress, dailyGoal: goal };
-    saveProgress(updated);
-    setProgress(updated);
-  }, [progress]);
+  const updateDailyGoal = useCallback(
+    (goal: number) => {
+      if (!progress) return;
+      const updated = { ...progress, dailyGoal: goal };
+      saveProgress(updated);
+      setProgress(updated);
+    },
+    [progress],
+  );
 
   const toggleTheme = useCallback(() => {
     if (!progress) return;
@@ -141,9 +195,23 @@ export function useVocabulary() {
     setProgress(updated);
   }, [progress]);
 
+  const setAiEnabled = useCallback(
+    (enabled: boolean) => {
+      if (!progress) return;
+      const updated = { ...progress, aiEnabled: enabled };
+      saveProgress(updated);
+      setProgress(updated);
+
+      if (!enabled) {
+        explainCache.clear();
+      }
+    },
+    [progress],
+  );
+
   const getAvailableWordsCount = useCallback(() => {
     if (!progress || !words.length) return 0;
-    return words.filter(w => !progress.completedWords.includes(w.id)).length;
+    return words.filter((w) => !progress.completedWords.includes(w.id)).length;
   }, [progress, words]);
 
   const isGoalReached = useCallback(() => {
@@ -162,6 +230,7 @@ export function useVocabulary() {
     resetProgress,
     updateDailyGoal,
     toggleTheme,
+    setAiEnabled,
     getAvailableWordsCount,
     isGoalReached,
   };

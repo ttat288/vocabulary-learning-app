@@ -19,6 +19,7 @@ export interface UserProgress {
   reviewQueue: ReviewQueueItem[];
   lastStudyDate: string;
   theme: 'dark' | 'light';
+  aiEnabled?: boolean;
 }
 
 export type DailyGoal = 10 | 20 | 50 | 'unlimited';

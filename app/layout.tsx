@@ -1,5 +1,5 @@
 import { Analytics } from '@vercel/analytics/next'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { LanguageProvider } from '@/contexts/language-context'
 import './globals.css'
@@ -14,11 +14,6 @@ export const metadata: Metadata = {
   title: 'VocabFlow - Learn English Vocabulary',
   description: 'Master English vocabulary daily. No login, no distractions. Just learn.',
   generator: 'v0.app',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
   icons: {
     icon: [
       {
@@ -36,6 +31,12 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 }
 
 export default function RootLayout({
