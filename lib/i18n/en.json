@@ -7,13 +7,13 @@
   "onboarding": {
     "heading": "Learn English",
     "tagline": "Master vocabulary every day. No login. Just learn.",
-    "question": "How many words would you like to learn daily?",
+    "question": "How many words would you like to learn in this session?",
     "goal10": "10 words",
     "goal20": "20 words",
     "goal50": "50 words",
-    "goalUnlimited": "Unlimited",
-    "footer": "Progress syncs automatically. Learn on any device.",
-    "startButton": "Start"
+    "footer": "Progress is saved automatically. Words you miss are prioritized in the next session.",
+    "startButton": "Start",
+    "goalMax": "{count} words"
   },
   "learning": {
     "rememberButton": "I Remember",
@@ -27,15 +27,16 @@
     "aiExplanation": "AI Explanation",
     "aiReady": "Ready",
     "retryExplanation": "Get another explanation",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "completeButton": "Complete"
   },
   "completion": {
     "heading": "Awesome Work!",
-    "subtitle": "Daily Goal Complete",
+    "subtitle": "Study session complete",
     "wordsLearned": "words learned",
     "reviewQueueLabel": "in review queue",
-    "continueButton": "Continue Learning",
-    "finishButton": "Finish for Today",
+    "continueButton": "Continue learning",
+    "finishButton": "Finish for today",
     "streak": "Current Streak"
   },
   "settings": {

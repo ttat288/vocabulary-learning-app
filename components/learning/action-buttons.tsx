@@ -11,13 +11,15 @@ interface ActionButtonsProps {
   onNotRemember: () => void;
   isLoading?: boolean;
   aiEnabled?: boolean;
+  isComplete?: boolean;
 }
 
 export function ActionButtons({
   onRemember,
   onNotRemember,
   isLoading = false,
-  aiEnabled = true,
+  aiEnabled = false,
+  isComplete = false,
 }: ActionButtonsProps) {
   const t = useTranslations();
 
@@ -33,7 +35,7 @@ export function ActionButtons({
           variant='outline'
           size='lg'
           onClick={onNotRemember}
-          disabled={isLoading}
+          disabled={isLoading || isComplete}
           className='h-11 w-full justify-center gap-2 border-border bg-card text-foreground hover:border-accent hover:text-accent'
         >
           <RotateCcw className='h-4 w-4' aria-hidden='true' />
@@ -50,7 +52,9 @@ export function ActionButtons({
           className='h-11 w-full justify-center gap-2'
         >
           <Check className='h-4 w-4' aria-hidden='true' />
-          {t('learning.rememberButton')}
+          {isComplete
+            ? t('learning.completeButton')
+            : t('learning.rememberButton')}
         </Button>
       </motion.div>
     </div>

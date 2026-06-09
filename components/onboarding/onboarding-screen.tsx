@@ -1,25 +1,37 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, Gauge, Infinity, Layers, Zap } from 'lucide-react';
+import { ArrowRight, Gauge, Layers, LibraryBig, Zap } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useTranslations } from '@/hooks/use-translations';
+import { DailyGoal } from '@/lib/types';
 
 interface OnboardingScreenProps {
-  onSelectGoal: (goal: number | 'unlimited') => void;
+  onSelectGoal: (goal: DailyGoal) => void;
+  maxGoal: number;
 }
 
-const GOALS = [
-  { value: 10, labelKey: 'onboarding.goal10', icon: Zap },
-  { value: 20, labelKey: 'onboarding.goal20', icon: Gauge },
-  { value: 50, labelKey: 'onboarding.goal50', icon: Layers },
-  { value: 'unlimited', labelKey: 'onboarding.goalUnlimited', icon: Infinity },
-] as const;
-
-export function OnboardingScreen({ onSelectGoal }: OnboardingScreenProps) {
+export function OnboardingScreen({
+  onSelectGoal,
+  maxGoal,
+}: OnboardingScreenProps) {
   const t = useTranslations();
+  const goals = [
+    { value: 10, label: t('onboarding.goal10'), icon: Zap },
+    { value: 20, label: t('onboarding.goal20'), icon: Gauge },
+    { value: 50, label: t('onboarding.goal50'), icon: Layers },
+    {
+      value: maxGoal,
+      label: t('onboarding.goalMax').replace('{count}', String(maxGoal)),
+      icon: LibraryBig,
+    },
+  ].filter(
+    (goal, index, allGoals) =>
+      allGoals.findIndex((candidate) => candidate.value === goal.value) ===
+      index,
+  );
 
   return (
     <main className='flex min-h-screen items-center justify-center px-4 py-8'>
@@ -50,7 +62,7 @@ export function OnboardingScreen({ onSelectGoal }: OnboardingScreenProps) {
             </div>
 
             <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4'>
-              {GOALS.map((goal) => {
+              {goals.map((goal) => {
                 const Icon = goal.icon;
                 return (
                   <button
@@ -63,7 +75,7 @@ export function OnboardingScreen({ onSelectGoal }: OnboardingScreenProps) {
                       <Icon className='h-5 w-5' />
                     </div>
                     <p className='font-semibold text-foreground'>
-                      {t(goal.labelKey)}
+                      {goal.label}
                     </p>
                     <div className='mt-4'>
                       <span className='inline-flex items-center gap-2 text-sm font-medium text-primary'>

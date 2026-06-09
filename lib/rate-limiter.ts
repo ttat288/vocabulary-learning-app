@@ -3,27 +3,27 @@ import { NextRequest, NextResponse } from 'next/server';
 // Store for rate limiting: IP -> array of timestamps
 const requestMap = new Map<string, number[]>();
 
-// Rate limit: 5 requests per minute per IP
-const MAX_REQUESTS = 5;
+// Default rate limit: 5 requests per minute per IP
+const DEFAULT_MAX_REQUESTS = 5;
 const WINDOW_MS = 60 * 1000; // 1 minute
-
-// Minimum time between duplicate requests (anti-spam)
-const DUPLICATE_REQUEST_TIMEOUT = 10 * 1000; // 10 seconds
-const duplicateRequestCache = new Map<string, { word: string; timestamp: number }>();
 
 export function getClientIp(request: NextRequest): string {
   const forwarded = request.headers.get('x-forwarded-for');
   return forwarded ? forwarded.split(',')[0].trim() : 'unknown';
 }
 
-export function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetIn: number } {
+export function checkRateLimit(
+  ip: string,
+  maxRequests: number = DEFAULT_MAX_REQUESTS,
+): { allowed: boolean; remaining: number; resetIn: number } {
   const now = Date.now();
   const requests = requestMap.get(ip) || [];
+  const requestLimit = Math.max(1, Math.floor(maxRequests));
 
   // Remove requests older than the window
   const recentRequests = requests.filter((timestamp) => now - timestamp < WINDOW_MS);
 
-  if (recentRequests.length >= MAX_REQUESTS) {
+  if (recentRequests.length >= requestLimit) {
     const oldestRequest = recentRequests[0];
     const resetIn = WINDOW_MS - (now - oldestRequest);
 
@@ -40,30 +40,8 @@ export function checkRateLimit(ip: string): { allowed: boolean; remaining: numbe
 
   return {
     allowed: true,
-    remaining: MAX_REQUESTS - recentRequests.length,
+    remaining: requestLimit - recentRequests.length,
     resetIn: 0,
-  };
-}
-
-export function checkDuplicateRequest(ip: string, word: string): { isDuplicate: boolean; waitTime: number } {
-  const now = Date.now();
-  const cacheKey = `${ip}-${word.toLowerCase()}`;
-  const cached = duplicateRequestCache.get(cacheKey);
-
-  if (cached && now - cached.timestamp < DUPLICATE_REQUEST_TIMEOUT) {
-    const waitTime = DUPLICATE_REQUEST_TIMEOUT - (now - cached.timestamp);
-    return {
-      isDuplicate: true,
-      waitTime: Math.ceil(waitTime / 1000),
-    };
-  }
-
-  // Update cache
-  duplicateRequestCache.set(cacheKey, { word, timestamp: now });
-
-  return {
-    isDuplicate: false,
-    waitTime: 0,
   };
 }
 

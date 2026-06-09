@@ -2,6 +2,7 @@ export const DAILY_GOALS = [10, 20, 50] as const;
 export const DEFAULT_DAILY_GOAL = 10;
 export const STORAGE_KEY = 'vocab-app-progress';
 export const WORDS_STORAGE_KEY = 'vocab-app-words';
+export const WORDS_DATA_VERSION = 'v2-part-of-speech';
 
 export const ANIMATION_CONFIGS = {
   cardEnter: {

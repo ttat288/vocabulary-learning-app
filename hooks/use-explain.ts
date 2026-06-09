@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useLanguage } from '@/contexts/language-context';
 import { Word } from '@/lib/types';
-import { explainCache } from '@/lib/explain-cache';
+import { ExplainStatus, explainCache } from '@/lib/explain-cache';
 
 export interface ExplainResponse {
   explanation: string;
@@ -13,54 +13,87 @@ export function useExplain() {
   const [explanation, setExplanation] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [remaining, setRemaining] = useState<number>(5);
+  const [status, setStatus] = useState<ExplainStatus>('idle');
+  const activeKeyRef = useRef<string | null>(null);
   const { language } = useLanguage();
 
   const explain = useCallback(
     async (word: Word) => {
+      const requestKey = explainCache.getKey(word.id, language);
+      activeKeyRef.current = requestKey;
       setIsLoading(true);
+      setStatus('loading');
       setError(null);
       setExplanation(null);
 
-      // If cached, use it
-      const cached = explainCache.get(word.id);
-      if (cached && cached.explanation) {
+      const cached = explainCache.get(word.id, language);
+      if (cached?.explanation) {
         setExplanation(cached.explanation);
         setIsLoading(false);
+        setStatus('success');
         return;
       }
 
       try {
-        const explanationText = await explainCache.fetch(word, language);
-        if (explanationText) {
-          setExplanation(explanationText);
-        }
+        const explanationText = await explainCache.fetch(
+          word,
+          language,
+          'foreground',
+        );
+
+        if (activeKeyRef.current !== requestKey) return;
+
+        setExplanation(explanationText);
+        setStatus('success');
       } catch (err: any) {
-        if (err.name === 'AbortError') {
-          setError('aborted');
-        } else {
-          console.error('[v0] Error requesting explanation:', err);
-          setError(
-            err?.message || 'Failed to generate explanation. Please try again.',
-          );
-        }
+        if (activeKeyRef.current !== requestKey) return;
+        if (err.name === 'AbortError') return;
+
+        console.error('[v0] Error requesting explanation:', err);
+        setError(
+          err?.message || 'Failed to generate explanation. Please try again.',
+        );
+        setStatus('error');
       } finally {
-        setIsLoading(false);
+        if (activeKeyRef.current === requestKey) {
+          setIsLoading(false);
+        }
       }
     },
     [language],
   );
 
   const clear = useCallback(() => {
+    activeKeyRef.current = null;
     setExplanation(null);
     setError(null);
-    // Note: do not clear cache here; cache persists for prefetch.
+    setIsLoading(false);
+    setStatus('idle');
   }, []);
 
-  // Abort any in-flight fetch started by this hook when unmounting
+  const retry = useCallback(
+    async (word: Word) => {
+      // Clear cache to force regeneration
+      explainCache.clearEntry(word.id, language);
+      // Now fetch fresh explanation
+      await explain(word);
+    },
+    [language, explain],
+  );
+
   useEffect(() => {
     return () => {
-      // Nothing specific to abort here — explainCache controllers are global and should be cancelled by caller logic when needed.
+      const activeKey = activeKeyRef.current;
+      if (!activeKey) return;
+
+      const separatorIndex = activeKey.indexOf(':');
+      if (separatorIndex < 0) return;
+
+      explainCache.cancel(
+        activeKey.slice(separatorIndex + 1),
+        activeKey.slice(0, separatorIndex),
+      );
+      activeKeyRef.current = null;
     };
   }, []);
 
@@ -68,8 +101,9 @@ export function useExplain() {
     explanation,
     isLoading,
     error,
-    remaining,
+    status,
     explain,
+    retry,
     clear,
   };
 }

@@ -6,14 +6,14 @@ import { useTranslations } from '@/hooks/use-translations';
 
 interface ProgressBarProps {
   current: number;
-  goal: number | string;
+  goal: number;
 }
 
 export function ProgressBar({ current, goal }: ProgressBarProps) {
   const t = useTranslations();
-  const goalNum = typeof goal === 'string' ? Math.max(current, 1) : goal;
-  const percentage =
-    goal === 'unlimited' ? 100 : Math.min((current / goalNum) * 100, 100);
+  const goalNum = Math.max(goal, 1);
+  const displayCurrent = Math.min(current, goalNum);
+  const percentage = Math.min((displayCurrent / goalNum) * 100, 100);
 
   return (
     <div className='shrink-0 rounded-xl border border-border bg-card px-4 py-3 shadow-sm'>
@@ -23,7 +23,7 @@ export function ProgressBar({ current, goal }: ProgressBarProps) {
             {t('progressBar.label')}
           </p>
           <p className='text-xs text-muted-foreground'>
-            {current} {t('progressBar.of')} {goal === 'unlimited' ? '∞' : goal}
+            {displayCurrent} {t('progressBar.of')} {goal}
           </p>
         </div>
         <Badge variant='outline'>{Math.round(percentage)}%</Badge>

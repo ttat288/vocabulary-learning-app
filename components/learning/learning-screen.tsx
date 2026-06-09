@@ -6,12 +6,17 @@ import { ProgressBar } from './progress-bar';
 import { ActionButtons } from './action-buttons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { explainCache } from '@/lib/explain-cache';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/contexts/language-context';
+import { BotOff } from 'lucide-react';
 
 interface LearningScreenProps {
   onComplete: () => void;
 }
+
+const RAPID_ADVANCE_LIMIT = 5;
+const RAPID_ADVANCE_WINDOW_MS = 8_000;
+const AI_AUTO_DISABLED_NOTICE_MS = 5_500;
 
 export function LearningScreen({ onComplete }: LearningScreenProps) {
   const {
@@ -22,6 +27,48 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
     markAsNotRemembered,
     isGoalReached,
   } = useVocabulary();
+  const rapidAdvanceTimestampsRef = useRef<number[]>([]);
+  const [showAiAutoDisabledNotice, setShowAiAutoDisabledNotice] =
+    useState(false);
+
+  useEffect(() => {
+    if (progress?.aiEnabled) return;
+    rapidAdvanceTimestampsRef.current = [];
+  }, [progress?.aiEnabled]);
+
+  useEffect(() => {
+    if (!showAiAutoDisabledNotice) return;
+
+    const timer = setTimeout(() => {
+      setShowAiAutoDisabledNotice(false);
+    }, AI_AUTO_DISABLED_NOTICE_MS);
+
+    return () => clearTimeout(timer);
+  }, [showAiAutoDisabledNotice]);
+
+  const shouldDisableAiForRapidAdvance = () => {
+    if (!(progress?.aiEnabled ?? false)) return false;
+
+    const now = Date.now();
+    const recentTimestamps = rapidAdvanceTimestampsRef.current
+      .filter((timestamp) => now - timestamp <= RAPID_ADVANCE_WINDOW_MS)
+      .concat(now);
+
+    rapidAdvanceTimestampsRef.current = recentTimestamps;
+
+    if (recentTimestamps.length < RAPID_ADVANCE_LIMIT) return false;
+
+    rapidAdvanceTimestampsRef.current = [];
+    return true;
+  };
+
+  const disableAiForRapidAdvance = () => {
+    window.dispatchEvent(
+      new CustomEvent('toggleAi', { detail: { enabled: false } }),
+    );
+    explainCache.clear();
+    setShowAiAutoDisabledNotice(true);
+  };
 
   if (isLoading) {
     return (
@@ -43,17 +90,75 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
     );
   }
 
+  const goalReached = isGoalReached();
+
   const handleRemember = () => {
+    if (goalReached) {
+      onComplete();
+      return;
+    }
+
+    const shouldDisableAi = shouldDisableAiForRapidAdvance();
+    const sessionCompletedCount = (progress.sessionCompletedWords ?? []).length;
+    const shouldCompleteAfterRemember =
+      sessionCompletedCount + 1 >= progress.dailyGoal;
+
     markAsRemembered();
 
-    if (isGoalReached()) {
+    if (shouldDisableAi) {
+      disableAiForRapidAdvance();
+    }
+
+    if (shouldCompleteAfterRemember) {
+      setTimeout(() => onComplete(), 500);
+    }
+  };
+
+  const handleNotRemember = () => {
+    if (goalReached) return;
+
+    const shouldDisableAi = shouldDisableAiForRapidAdvance();
+    const sessionCompletedCount = (progress.sessionCompletedWords ?? []).length;
+    const shouldCompleteAfterReview =
+      sessionCompletedCount + 1 >= progress.dailyGoal;
+    markAsNotRemembered();
+
+    if (shouldDisableAi) {
+      disableAiForRapidAdvance();
+    }
+
+    if (shouldCompleteAfterReview) {
       setTimeout(() => onComplete(), 500);
     }
   };
 
   return (
     <div className='flex h-full min-h-0 flex-col gap-3 py-3 sm:gap-4 sm:py-4'>
-      <ProgressBar current={progress.learnedToday} goal={progress.dailyGoal} />
+      <AnimatePresence>
+        {showAiAutoDisabledNotice && (
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 24 }}
+            transition={{ duration: 0.2 }}
+            className='fixed right-3 top-20 z-50 max-w-xs rounded-lg border border-pink-200 dark:border-purple-800 bg-gradient-to-br from-pink-50 to-purple-50 dark:from-pink-950/40 dark:to-purple-950/40 px-4 py-3 text-card-foreground shadow-lg sm:right-4'
+            role='status'
+            aria-live='polite'
+          >
+            <div className='flex items-start gap-3'>
+              <BotOff className='mt-0.5 h-4 w-4 shrink-0 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full p-0.5 text-white' />
+              <p className='text-sm leading-5'>
+                AI đã tự động tắt vì bạn học quá nhanh.
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <ProgressBar
+        current={(progress.sessionCompletedWords ?? []).length}
+        goal={progress.dailyGoal}
+      />
 
       <div className='relative min-h-0 flex-1'>
         <div className='flex h-full min-h-0 items-start justify-center'>
@@ -69,7 +174,7 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
             >
               <WordCard
                 word={currentWord}
-                aiEnabled={progress.aiEnabled ?? true}
+                aiEnabled={progress.aiEnabled ?? false}
               />
             </motion.div>
           </AnimatePresence>
@@ -79,8 +184,9 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
       <div className='shrink-0 pb-1'>
         <ActionButtons
           onRemember={handleRemember}
-          onNotRemember={markAsNotRemembered}
-          aiEnabled={progress.aiEnabled ?? true}
+          onNotRemember={handleNotRemember}
+          aiEnabled={progress.aiEnabled ?? false}
+          isComplete={goalReached}
         />
       </div>
     </div>
@@ -108,7 +214,7 @@ export function LearningScreenPrefetchWrapper(props: LearningScreenProps) {
 
     const allowed = new Set(next.map((w) => w.id));
     allowed.add(currentWord.id);
-    explainCache.cancelExcept(allowed);
+    explainCache.cancelExcept(allowed, language);
 
     return () => {
       // On unmount, do not aggressively clear cache; let cache persist across session.

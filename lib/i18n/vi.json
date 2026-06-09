@@ -7,13 +7,13 @@
   "onboarding": {
     "heading": "Học Tiếng Anh",
     "tagline": "Nắm vững từ vựng hằng ngày. Không cần đăng nhập. Chỉ cần học.",
-    "question": "Bạn muốn học bao nhiêu từ mỗi ngày?",
+    "question": "Bạn muốn học bao nhiêu từ trong phiên này?",
     "goal10": "10 từ",
     "goal20": "20 từ",
     "goal50": "50 từ",
-    "goalUnlimited": "Không giới hạn",
-    "footer": "Tiến độ được đồng bộ hóa tự động. Học trên bất kỳ thiết bị nào.",
-    "startButton": "Bắt đầu"
+    "footer": "Tiến độ được lưu tự động. Các từ chưa nhớ sẽ được ưu tiên ôn lại ở lần học tiếp theo.",
+    "startButton": "Bắt đầu",
+    "goalMax": "{count} từ"
   },
   "learning": {
     "rememberButton": "Tôi Nhớ",
@@ -27,15 +27,16 @@
     "aiExplanation": "Giải Thích AI",
     "aiReady": "Sẵn sàng",
     "retryExplanation": "Xin giải thích khác",
-    "tryAgain": "Thử lại"
+    "tryAgain": "Thử lại",
+    "completeButton": "Hoàn thành"
   },
   "completion": {
     "heading": "Tuyệt Vời!",
-    "subtitle": "Hoàn Thành Mục Tiêu Hằng Ngày",
+    "subtitle": "Hoàn thành phiên học",
     "wordsLearned": "từ đã học",
     "reviewQueueLabel": "cần ôn lại",
-    "continueButton": "Tiếp Tục Học",
-    "finishButton": "Kết Thúc Hôm Nay",
+    "continueButton": "Tiếp tục học",
+    "finishButton": "Kết thúc hôm nay",
     "streak": "Chuỗi Hiện Tại"
   },
   "settings": {

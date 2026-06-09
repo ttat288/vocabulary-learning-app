@@ -13,6 +13,8 @@ import { SettingsScreen } from '@/components/settings/settings-screen';
 import { motion } from 'framer-motion';
 import { Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { DailyGoal, UserProgress } from '@/lib/types';
+import { getProgress } from '@/lib/storage';
 
 type AppScreen = 'onboarding' | 'learning' | 'completion' | 'settings';
 
@@ -20,43 +22,56 @@ export default function Page() {
   const [screen, setScreen] = useState<AppScreen>('onboarding');
   const [showSettings, setShowSettings] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [completionProgress, setCompletionProgress] =
+    useState<UserProgress | null>(null);
 
   const t = useTranslations();
   const {
     progress,
+    words,
     isLoading,
     resetProgress,
     updateDailyGoal,
     toggleTheme,
+    setThemePreset,
   } = useVocabulary();
 
   // Check if user has completed onboarding
   useEffect(() => {
     if (!isLoading && progress) {
       setMounted(true);
-      // If user has completed words, they've already done onboarding
+      const sessionCompletedCount = (progress.sessionCompletedWords ?? [])
+        .length;
       if (
-        progress.completedWords.length > 0 ||
-        progress.learnedToday > 0 ||
-        progress.reviewQueue.length > 0
+        sessionCompletedCount > 0 &&
+        sessionCompletedCount < progress.dailyGoal
       ) {
         setScreen('learning');
       }
-      // Otherwise, show onboarding
     }
   }, [progress, isLoading]);
 
-  const handleSelectGoal = (goal: number | 'unlimited') => {
-    updateDailyGoal(typeof goal === 'string' ? 'unlimited' : goal);
+  const handleSelectGoal = (goal: DailyGoal) => {
+    setCompletionProgress(null);
+    updateDailyGoal(goal);
     setScreen('learning');
   };
 
   const handleCompletionContinue = () => {
+    const latestProgress = completionProgress ?? getProgress();
+    setCompletionProgress(null);
+    updateDailyGoal(latestProgress.dailyGoal);
     setScreen('learning');
   };
 
   const handleCompletionFinish = () => {
-    setScreen('learning');
+    setCompletionProgress(null);
+    setScreen('onboarding');
+  };
+
+  const handleLearningComplete = () => {
+    setCompletionProgress(getProgress());
+    setScreen('completion');
   };
 
   const handleSettingsReset = () => {
@@ -80,7 +95,10 @@ export default function Page() {
     <main className='flex h-screen w-full flex-col overflow-hidden bg-background text-foreground'>
       {/* Onboarding Screen - Full height */}
       {screen === 'onboarding' && (
-        <OnboardingScreen onSelectGoal={handleSelectGoal} />
+        <OnboardingScreen
+          maxGoal={Math.max(words.length, 1)}
+          onSelectGoal={handleSelectGoal}
+        />
       )}
 
       {/* Learning/Completion Screens */}
@@ -93,14 +111,18 @@ export default function Page() {
             className='shrink-0 border-b border-border bg-card/80 backdrop-blur'
           >
             <div className='max-w-6xl mx-auto px-4 py-4 flex items-center justify-between'>
-              <div>
-                <h1 className='text-xl font-semibold text-foreground'>
+              <button
+                type='button'
+                className='text-left'
+                onClick={() => setScreen('onboarding')}
+              >
+                <h1 className='text-xl font-semibold text-foreground transition-colors hover:text-primary'>
                   VocabFlow
                 </h1>
                 <p className='text-xs text-muted-foreground'>
                   {t('common.subtitle')}
                 </p>
-              </div>
+              </button>
               <Button
                 type='button'
                 variant='outline'
@@ -117,14 +139,16 @@ export default function Page() {
           <div className='flex-1 min-h-0 max-w-6xl mx-auto w-full px-3 sm:px-4 pb-4 sm:pb-6 flex flex-col'>
             {screen === 'learning' && progress && (
               <LearningScreenPrefetchWrapper
-                onComplete={() => setScreen('completion')}
+                onComplete={handleLearningComplete}
               />
             )}
 
-            {screen === 'completion' && progress && (
+            {screen === 'completion' && (completionProgress ?? progress) && (
               <CompletionScreen
-                wordsLearned={progress.learnedToday}
-                reviewQueueSize={progress.reviewQueue.length}
+                wordsLearned={(completionProgress ?? progress)!.learnedToday}
+                reviewQueueSize={
+                  (completionProgress ?? progress)!.reviewQueue.length
+                }
                 onContinue={handleCompletionContinue}
                 onFinish={handleCompletionFinish}
               />
@@ -137,8 +161,8 @@ export default function Page() {
       {showSettings && progress && (
         <SettingsScreen
           progress={progress}
-          onUpdateGoal={updateDailyGoal}
           onToggleTheme={toggleTheme}
+          onUpdateThemePreset={setThemePreset}
           onReset={handleSettingsReset}
           onClose={() => setShowSettings(false)}
         />

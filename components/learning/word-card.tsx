@@ -5,14 +5,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpen, Quote, Volume2 } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useExplain } from '@/hooks/use-explain';
 import { useTranslations } from '@/hooks/use-translations';
+import { useLanguage } from '@/contexts/language-context';
 import { explainCache } from '@/lib/explain-cache';
 import { Word } from '@/lib/types';
 import { AiCard } from './ai-card';
@@ -24,16 +21,44 @@ interface WordCardProps {
 
 export function WordCard({ word, aiEnabled }: WordCardProps) {
   const t = useTranslations();
-  const { explanation, isLoading, error, explain, clear } = useExplain();
+  const { language } = useLanguage();
+  const { explanation, isLoading, error, explain, retry, clear } = useExplain();
+  const partOfSpeech = word.partOfSpeech?.trim();
+  const speakWord = useCallback(() => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+
+    const text = word.word
+      .replace(/\([^)]*\)/g, '')
+      .split(',')[0]
+      .trim();
+
+    if (!text) return;
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+
+    const voices = window.speechSynthesis.getVoices();
+    const englishVoice = voices.find((voice) =>
+      voice.lang.toLowerCase().startsWith('en'),
+    );
+    if (englishVoice) utterance.voice = englishVoice;
+
+    window.speechSynthesis.speak(utterance);
+  }, [word.word]);
 
   const requestExplain = useCallback(async () => {
     if (!aiEnabled) return;
     await explain(word);
   }, [aiEnabled, explain, word]);
 
-  const cached = explainCache.get(word.id);
-  const prefetchLoading = aiEnabled && !!cached && cached.loading;
-  const prefilledExplanation = aiEnabled ? cached?.explanation ?? null : null;
+  const handleRetry = useCallback(async () => {
+    await retry(word);
+  }, [retry, word]);
+
+  const cached = explainCache.get(word.id, language);
+  const prefilledExplanation = aiEnabled ? (cached?.explanation ?? null) : null;
 
   useEffect(() => {
     if (!aiEnabled) {
@@ -42,7 +67,15 @@ export function WordCard({ word, aiEnabled }: WordCardProps) {
     }
 
     requestExplain();
-  }, [aiEnabled, clear, requestExplain, word.id]);
+  }, [aiEnabled, clear, requestExplain, word.id, language]);
+
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [word.id]);
 
   return (
     <motion.div
@@ -64,16 +97,29 @@ export function WordCard({ word, aiEnabled }: WordCardProps) {
           <CardHeader className='shrink-0 border-b border-border p-4 sm:p-5'>
             <div className='flex items-start justify-between gap-4'>
               <div className='min-w-0 space-y-2'>
-                <Badge variant='outline'>{t('learning.definition')}</Badge>
+                <div className='flex flex-wrap items-center gap-2'>
+                  <Badge variant='outline'>{t('learning.definition')}</Badge>
+                  {partOfSpeech && (
+                    <Badge variant='secondary'>{partOfSpeech}</Badge>
+                  )}
+                </div>
                 <CardTitle className='break-words text-3xl leading-tight sm:text-4xl md:text-5xl'>
                   {word.word}
                 </CardTitle>
                 <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                  <Volume2 className='h-4 w-4' aria-hidden='true' />
+                  <Button
+                    type='button'
+                    variant='ghost'
+                    size='icon-xs'
+                    aria-label={`Play pronunciation for ${word.word}`}
+                    title='Play pronunciation'
+                    onClick={speakWord}
+                  >
+                    <Volume2 className='h-4 w-4' aria-hidden='true' />
+                  </Button>
                   <span className='break-words font-mono'>{word.phonetic}</span>
                 </div>
               </div>
-
             </div>
           </CardHeader>
 
@@ -111,8 +157,8 @@ export function WordCard({ word, aiEnabled }: WordCardProps) {
               explanation={explanation ?? prefilledExplanation}
               error={error}
               isLoading={isLoading}
-              prefetchLoading={prefetchLoading}
               onExplain={requestExplain}
+              onRetry={handleRetry}
               word={word}
             />
           )}

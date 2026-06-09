@@ -10,8 +10,8 @@ interface AiCardProps {
   explanation: string | null;
   error: string | null;
   isLoading: boolean;
-  prefetchLoading?: boolean;
   onExplain: (word: Word) => Promise<void>;
+  onRetry: (word: Word) => Promise<void>;
   word: Word;
 }
 
@@ -19,8 +19,8 @@ export function AiCard({
   explanation,
   error,
   isLoading,
-  prefetchLoading = false,
   onExplain,
+  onRetry,
   word,
 }: AiCardProps) {
   const t = useTranslations();
@@ -36,11 +36,15 @@ export function AiCard({
         transition={{ duration: 0.25 }}
         className='min-h-0'
       >
-        <Card className='flex h-full min-h-0 flex-col overflow-hidden'>
-          <CardHeader className='shrink-0 border-b border-border p-4'>
+        <Card className='flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-br from-pink-50/50 to-purple-50/50 dark:from-pink-950/20 dark:to-purple-950/20'>
+          <CardHeader className='shrink-0 border-b border-pink-200 dark:border-purple-800 bg-gradient-to-r from-pink-500/10 to-purple-500/10 p-4'>
             <CardTitle className='flex items-center gap-2 text-base'>
-              <Bot className='h-4 w-4 text-accent' />
-              {t('learning.aiExplanation')}
+              <span className='flex h-5 w-5 items-center justify-center rounded bg-gradient-to-r from-pink-500 to-purple-500 text-white'>
+                <Bot className='h-3 w-3' />
+              </span>
+              <span className='bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent'>
+                {t('learning.aiExplanation')}
+              </span>
             </CardTitle>
           </CardHeader>
           <CardContent className='min-h-0 flex-1 overflow-auto p-4'>
@@ -62,7 +66,7 @@ export function AiCard({
                 explanation={explanation}
                 error={error}
                 isLoading={isLoading}
-                onRetry={() => onExplain(word)}
+                onRetry={() => onRetry(word)}
               />
             )}
           </CardContent>
