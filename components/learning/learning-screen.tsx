@@ -7,7 +7,6 @@ import { ActionButtons } from './action-buttons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { explainCache } from '@/lib/explain-cache';
 import { useEffect, useRef, useState } from 'react';
-import { useLanguage } from '@/contexts/language-context';
 import { BotOff } from 'lucide-react';
 
 interface LearningScreenProps {
@@ -193,33 +192,14 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
   );
 }
 
-// Prefetch AI explanations for upcoming words (5 ahead). Cancel others.
 export function LearningScreenPrefetchWrapper(props: LearningScreenProps) {
-  const { words, currentWord, progress } = useVocabulary();
-  const { language } = useLanguage();
+  const { progress } = useVocabulary();
 
   useEffect(() => {
     if (!progress?.aiEnabled) {
       explainCache.clear();
-      return;
     }
-
-    if (!currentWord || !words || words.length === 0) return;
-
-    const idx = words.findIndex((w) => w.id === currentWord.id);
-    if (idx < 0) return;
-
-    const next = words.slice(idx + 1, idx + 6);
-    explainCache.prefetch(next, language);
-
-    const allowed = new Set(next.map((w) => w.id));
-    allowed.add(currentWord.id);
-    explainCache.cancelExcept(allowed, language);
-
-    return () => {
-      // On unmount, do not aggressively clear cache; let cache persist across session.
-    };
-  }, [currentWord?.id, words, language, progress?.aiEnabled]);
+  }, [progress?.aiEnabled]);
 
   return <LearningScreen {...props} />;
 }

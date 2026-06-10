@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpen, Quote, Volume2 } from 'lucide-react';
 
@@ -10,7 +10,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useExplain } from '@/hooks/use-explain';
 import { useTranslations } from '@/hooks/use-translations';
 import { useLanguage } from '@/contexts/language-context';
-import { explainCache } from '@/lib/explain-cache';
+import {
+  DEFAULT_EXPLAIN_ACTION,
+  type ExplainAction,
+  type ExplainActionInput,
+  type ExplainRequestOptions,
+} from '@/lib/explain-actions';
 import { Word } from '@/lib/types';
 import { AiCard } from './ai-card';
 
@@ -22,7 +27,11 @@ interface WordCardProps {
 export function WordCard({ word, aiEnabled }: WordCardProps) {
   const t = useTranslations();
   const { language } = useLanguage();
-  const { explanation, isLoading, error, explain, retry, clear } = useExplain();
+  const { explanation, isLoading, error, status, action, explain, retry, clear } =
+    useExplain();
+  const lastRequestOptionsRef = useRef<ExplainRequestOptions>({
+    action: DEFAULT_EXPLAIN_ACTION,
+  });
   const partOfSpeech = word.partOfSpeech?.trim();
   const speakWord = useCallback(() => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
@@ -48,26 +57,34 @@ export function WordCard({ word, aiEnabled }: WordCardProps) {
     window.speechSynthesis.speak(utterance);
   }, [word.word]);
 
-  const requestExplain = useCallback(async () => {
-    if (!aiEnabled) return;
-    await explain(word);
-  }, [aiEnabled, explain, word]);
+  const requestActionExplain = useCallback(
+    async (selectedAction: ExplainAction, input: ExplainActionInput = {}) => {
+      if (!aiEnabled) return;
+
+      const options = {
+        ...input,
+        action: selectedAction,
+      };
+
+      lastRequestOptionsRef.current = options;
+      await explain(word, options);
+    },
+    [aiEnabled, explain, word],
+  );
 
   const handleRetry = useCallback(async () => {
-    await retry(word);
+    await retry(word, lastRequestOptionsRef.current);
   }, [retry, word]);
 
-  const cached = explainCache.get(word.id, language);
-  const prefilledExplanation = aiEnabled ? (cached?.explanation ?? null) : null;
+  const resetAiPanel = useCallback(() => {
+    lastRequestOptionsRef.current = { action: DEFAULT_EXPLAIN_ACTION };
+    clear();
+  }, [clear]);
 
   useEffect(() => {
-    if (!aiEnabled) {
-      clear();
-      return;
-    }
-
-    requestExplain();
-  }, [aiEnabled, clear, requestExplain, word.id, language]);
+    lastRequestOptionsRef.current = { action: DEFAULT_EXPLAIN_ACTION };
+    clear();
+  }, [aiEnabled, clear, word.id, language]);
 
   useEffect(() => {
     return () => {
@@ -154,11 +171,14 @@ export function WordCard({ word, aiEnabled }: WordCardProps) {
         <AnimatePresence>
           {aiEnabled && (
             <AiCard
-              explanation={explanation ?? prefilledExplanation}
+              activeAction={action}
+              explanation={explanation}
               error={error}
               isLoading={isLoading}
-              onExplain={requestExplain}
+              onExplain={requestActionExplain}
+              onReset={resetAiPanel}
               onRetry={handleRetry}
+              status={status}
               word={word}
             />
           )}

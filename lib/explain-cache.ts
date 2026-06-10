@@ -1,4 +1,13 @@
 import { Word } from './types';
+import {
+  buildExplainRequestBody,
+  DEFAULT_EXPLAIN_ACTION,
+  getExplainCacheKey,
+  normalizeExplainAction,
+  parseExplainCacheKey,
+  type AiExplanation,
+  type ExplainRequestOptions,
+} from './explain-actions';
 
 export type ExplainStatus =
   | 'idle'
@@ -10,14 +19,14 @@ type RequestPriority = 'foreground' | 'background';
 
 export type CacheEntry = {
   status: ExplainStatus;
-  explanation: string | null;
+  explanation: AiExplanation | null;
   error: string | null;
   loading: boolean;
   retryAfter: number | null;
   updatedAt: number;
   priority?: RequestPriority;
   controller?: AbortController | null;
-  promise?: Promise<string> | null;
+  promise?: Promise<AiExplanation> | null;
 };
 
 type PrefetchItem = {
@@ -38,34 +47,24 @@ let backgroundPausedUntil = 0;
 // Server limit is 5/minute. Keep background work slower so current-word requests stay responsive.
 const PREFETCH_INTERVAL_MS = 15_000;
 
-function getCacheKey(wordId: string, language: string = 'en') {
-  return `${language}:${wordId}`;
-}
-
 function getLanguageFromKey(key: string) {
-  return key.split(':', 1)[0];
+  return parseExplainCacheKey(key).language;
 }
 
 function getWordIdFromKey(key: string) {
-  return key.slice(getLanguageFromKey(key).length + 1);
+  return parseExplainCacheKey(key).wordId;
 }
 
 async function fetchExplainForWord(
   word: Word,
   signal?: AbortSignal,
   language: string = 'en',
+  options: ExplainRequestOptions = {},
 ) {
   const response = await fetch('/api/explain', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      word: word.word,
-      partOfSpeech: word.partOfSpeech,
-      meaning: word.meaning,
-      example: word.example,
-      exampleMeaning: word.exampleMeaning,
-      language,
-    }),
+    body: JSON.stringify(buildExplainRequestBody(word, language, options)),
     signal,
   });
 
@@ -90,7 +89,7 @@ async function fetchExplainForWord(
   }
 
   const data = await response.json();
-  return data.explanation as string;
+  return data.explanation as AiExplanation;
 }
 
 function makeIdleEntry(): CacheEntry {
@@ -128,18 +127,27 @@ function cancelBackgroundRequests() {
 }
 
 export const explainCache = {
-  getKey: getCacheKey,
+  getKey: getExplainCacheKey,
 
-  get(wordId: string, language: string = 'en') {
-    return cache.get(getCacheKey(wordId, language)) ?? null;
+  get(
+    wordId: string,
+    language: string = 'en',
+    options: ExplainRequestOptions = {},
+  ) {
+    return cache.get(getExplainCacheKey(wordId, language, options)) ?? null;
   },
 
   async fetch(
     word: Word,
     language: string = 'en',
     priority: RequestPriority = 'foreground',
+    options: ExplainRequestOptions = {},
   ) {
-    const key = getCacheKey(word.id, language);
+    const action = normalizeExplainAction(options.action);
+    const key = getExplainCacheKey(word.id, language, {
+      ...options,
+      action,
+    });
     const existing = cache.get(key);
 
     if (existing?.explanation) return existing.explanation;
@@ -154,7 +162,10 @@ export const explainCache = {
     }
 
     const controller = new AbortController();
-    const promise = fetchExplainForWord(word, controller.signal, language);
+    const promise = fetchExplainForWord(word, controller.signal, language, {
+      ...options,
+      action,
+    });
 
     cache.set(key, {
       status: 'loading',
@@ -218,7 +229,9 @@ export const explainCache = {
 
   prefetch(words: Word[], language: string = 'en') {
     for (const word of words) {
-      const key = getCacheKey(word.id, language);
+      const key = getExplainCacheKey(word.id, language, {
+        action: DEFAULT_EXPLAIN_ACTION,
+      });
       const entry = cache.get(key);
       if (!entry || entry.status === 'idle' || entry.status === 'aborted') {
         prefetchQueue.set(key, { word, language });
@@ -227,8 +240,12 @@ export const explainCache = {
     schedulePrefetch();
   },
 
-  cancel(wordId: string, language: string = 'en') {
-    const key = getCacheKey(wordId, language);
+  cancel(
+    wordId: string,
+    language: string = 'en',
+    options: ExplainRequestOptions = {},
+  ) {
+    const key = getExplainCacheKey(wordId, language, options);
     const entry = cache.get(key);
     if (!entry?.controller) return;
 
@@ -243,8 +260,27 @@ export const explainCache = {
     });
   },
 
-  clearEntry(wordId: string, language: string = 'en') {
-    const key = getCacheKey(wordId, language);
+  cancelKey(key: string) {
+    const entry = cache.get(key);
+    if (!entry?.controller) return;
+
+    entry.controller.abort();
+    cache.set(key, {
+      ...entry,
+      status: 'aborted',
+      loading: false,
+      controller: null,
+      promise: null,
+      updatedAt: Date.now(),
+    });
+  },
+
+  clearEntry(
+    wordId: string,
+    language: string = 'en',
+    options: ExplainRequestOptions = {},
+  ) {
+    const key = getExplainCacheKey(wordId, language, options);
     const entry = cache.get(key);
     if (entry?.controller) {
       entry.controller.abort();

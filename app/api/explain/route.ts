@@ -1,4 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import {
+  buildExplainPrompt,
+  getExplainActionInput,
+  getExplainMaxTokens,
+  normalizeExplainAction,
+  type AiExplanation,
+  type ExplainAction,
+} from '@/lib/explain-actions';
 import { getClientIp, checkRateLimit } from '@/lib/rate-limiter';
 
 const OPENROUTER_KEY_NAMES = [
@@ -22,15 +30,18 @@ type ExplainRequestBody = {
   example?: string | null;
   exampleMeaning?: string | null;
   language?: string | null;
+  action?: string | null;
+  userSentence?: string | null;
+  compareWord?: string | null;
 };
 
 type CachedExplanation = {
-  explanation: string;
+  explanation: AiExplanation;
   createdAt: number;
 };
 
 const completedExplanations = new Map<string, CachedExplanation>();
-const inFlightExplanations = new Map<string, Promise<string>>();
+const inFlightExplanations = new Map<string, Promise<AiExplanation>>();
 
 function safeTrim(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
@@ -64,25 +75,21 @@ async function readJsonBody(request: NextRequest) {
   }
 }
 
-function getExplanationRequestKey(
-  ip: string,
-  {
-    word,
-    partOfSpeech,
-    meaning,
-    example,
-    exampleMeaning,
-    language = 'en',
-  }: ExplainRequestBody,
-) {
+function getExplanationRequestKey(ip: string, body: ExplainRequestBody) {
+  const action = normalizeExplainAction(body.action);
+  const actionInput = getExplainActionInput(action, body);
+
   return JSON.stringify([
     ip,
-    safeTrim(language).toLowerCase() || 'en',
-    safeTrim(word).toLowerCase(),
-    safeTrim(partOfSpeech).toLowerCase(),
-    safeTrim(meaning),
-    safeTrim(example),
-    safeTrim(exampleMeaning),
+    safeTrim(body.language).toLowerCase() || 'en',
+    action,
+    safeTrim(body.word).toLowerCase(),
+    safeTrim(body.partOfSpeech).toLowerCase(),
+    safeTrim(body.meaning),
+    safeTrim(body.example),
+    safeTrim(body.exampleMeaning),
+    actionInput.userSentence,
+    actionInput.compareWord.toLowerCase(),
   ]);
 }
 
@@ -98,7 +105,42 @@ function getCachedExplanation(key: string) {
   return cached.explanation;
 }
 
-async function callOpenRouter(prompt: string) {
+function extractJsonObject(content: string) {
+  const trimmed = content.trim();
+  const fencedMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+  const candidate = fencedMatch?.[1]?.trim() ?? trimmed;
+  const start = candidate.indexOf('{');
+  const end = candidate.lastIndexOf('}');
+
+  if (start < 0 || end <= start) return null;
+
+  return candidate.slice(start, end + 1);
+}
+
+function parseAiExplanation(
+  content: string,
+  action: ExplainAction,
+): AiExplanation {
+  const jsonText = extractJsonObject(content);
+
+  if (!jsonText) {
+    return { type: 'raw', text: content };
+  }
+
+  try {
+    const parsed = JSON.parse(jsonText);
+
+    if (parsed && typeof parsed === 'object' && parsed.type === action) {
+      return parsed as AiExplanation;
+    }
+  } catch {
+    // Fall through to raw fallback.
+  }
+
+  return { type: 'raw', text: content };
+}
+
+async function callOpenRouter(prompt: string, action: ExplainAction) {
   const allKeys = getConfiguredOpenRouterKeys();
 
   if (allKeys.length === 0) {
@@ -134,7 +176,7 @@ async function callOpenRouter(prompt: string) {
               },
             ],
             temperature: 0.7,
-            max_tokens: 200,
+            max_tokens: getExplainMaxTokens(action),
           }),
         },
       );
@@ -158,15 +200,6 @@ async function callOpenRouter(prompt: string) {
           lastError,
         );
 
-        /**
-         * Những lỗi này thường có thể do từng key:
-         * - 401/403: key sai hoặc bị chặn
-         * - 402: thiếu credit
-         * - 429: rate limit
-         *
-         * 404 thường là model không tồn tại / unavailable,
-         * thử key khác cũng không giải quyết được.
-         */
         if ([401, 402, 403, 429].includes(response.status)) {
           continue;
         }
@@ -200,9 +233,6 @@ async function callOpenRouter(prompt: string) {
 
       console.error('[v0] OpenRouter error with key', apiKey.name, ':', err);
 
-      /**
-       * Nếu là lỗi model 404/unavailable thì không cần thử key khác.
-       */
       const errorMessage = err?.message?.toLowerCase?.() || '';
 
       if (
@@ -239,29 +269,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const {
-      word,
-      partOfSpeech,
-      meaning,
-      example,
-      exampleMeaning,
-      language = 'en',
-    } = body;
-
-    const safeWord = safeTrim(word);
-    const safeLanguage = safeTrim(language).toLowerCase() || 'en';
+    const safeWord = safeTrim(body.word);
+    const safeLanguage = safeTrim(body.language).toLowerCase() || 'en';
+    const safeAction = normalizeExplainAction(body.action);
+    const actionInput = getExplainActionInput(safeAction, body);
 
     if (!safeWord) {
       return NextResponse.json({ error: 'Word is required' }, { status: 400 });
     }
 
+    if (safeAction === 'check_sentence' && !actionInput.userSentence) {
+      return NextResponse.json(
+        { error: 'Sentence is required for this AI action' },
+        { status: 400 },
+      );
+    }
+
+    if (safeAction === 'compare' && !actionInput.compareWord) {
+      return NextResponse.json(
+        { error: 'Comparison word is required for this AI action' },
+        { status: 400 },
+      );
+    }
+
     const requestKey = getExplanationRequestKey(ip, {
-      word,
-      partOfSpeech,
-      meaning,
-      example,
-      exampleMeaning,
+      ...body,
       language: safeLanguage,
+      action: safeAction,
+      ...actionInput,
     });
 
     const cachedExplanation = getCachedExplanation(requestKey);
@@ -312,85 +347,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const safePartOfSpeech = safeTrim(partOfSpeech) || 'unknown';
-    const safeMeaning = safeTrim(meaning) || 'no definition provided';
-    const safeExample = safeTrim(example) || 'no example provided';
+    const prompt = buildExplainPrompt({
+      action: safeAction,
+      word: safeWord,
+      partOfSpeech: safeTrim(body.partOfSpeech) || 'unknown',
+      meaning: safeTrim(body.meaning) || 'no definition provided',
+      example: safeTrim(body.example) || 'no example provided',
+      language: safeLanguage,
+      ...actionInput,
+    });
 
-    const isVietnamese = safeLanguage === 'vi';
-
-    //     const prompt = isVietnamese
-    //       ? `Giải thích từ "${safeWord}" cho học viên Tiếng Anh ở mức trung cấp. Sử dụng Tiếng Việt để giải thích rõ ràng.
-
-    // Từ vựng: ${safeWord}
-    // Từ loại: ${safePartOfSpeech}
-    // Định nghĩa gốc: ${safeMeaning}
-    // Ví dụ: "${safeExample}"
-
-    // Hãy cung cấp một giải thích dễ hiểu trong 2-3 câu giúp người học hiểu:
-    // 1. Ý nghĩa chính của từ này
-    // 2. Cách sử dụng từ trong đời sống thực tế
-    // 3. Một ví dụ khác, khác với ví dụ gốc
-
-    // Không dùng thuật ngữ phức tạp. Trả lời bằng Tiếng Việt.`
-    //       : `Explain the word "${safeWord}" to intermediate English learners in a simple and clear way.
-
-    // Word: ${safeWord}
-    // Part of speech: ${safePartOfSpeech}
-    // Definition: ${safeMeaning}
-    // Example: "${safeExample}"
-
-    // Provide a clear explanation in 2-3 sentences that helps learners understand:
-    // 1. What this word means
-    // 2. How to use it in real situations
-    // 3. Give another example different from the original example
-
-    // Keep the language simple and accessible. Do not use complex terminology.`;
-    const prompt = isVietnamese
-      ? `Bạn là giáo viên Tiếng Anh cho học viên trình độ trung cấp.
-
-Giải thích từ "${safeWord}" bằng Tiếng Việt.
-
-Thông tin:
-- Từ: ${safeWord}
-- Từ loại: ${safePartOfSpeech}
-- Định nghĩa gốc: ${safeMeaning}
-- Ví dụ gốc: "${safeExample}"
-
-Hãy trả lời đúng format sau:
-
-Ý nghĩa: [giải thích ngắn gọn, tự nhiên]
-Cách dùng: [nói từ này thường dùng trong tình huống nào]
-Ví dụ mới: [một câu ví dụ tiếng Anh mới]
-Nghĩa ví dụ: [dịch ví dụ mới sang Tiếng Việt]
-
-Yêu cầu:
-- Không dùng thuật ngữ phức tạp.
-- Không lặp lại nguyên văn định nghĩa gốc.
-- Ví dụ mới phải tự nhiên như người bản xứ dùng.`
-      : `You are an English teacher for intermediate learners.
-
-Explain the word "${safeWord}" in simple English.
-
-Information:
-- Word: ${safeWord}
-- Part of speech: ${safePartOfSpeech}
-- Original definition: ${safeMeaning}
-- Original example: "${safeExample}"
-
-Use exactly this format:
-
-Meaning: [short and natural explanation]
-Usage: [how people usually use this word in real life]
-New example: [one new natural English example]
-Example meaning: [explain the example in simple English]
-
-Requirements:
-- Do not use complex terminology.
-- Do not simply repeat the original definition.
-- The new example must sound natural.`;
-
-    const explanationPromise = callOpenRouter(prompt)
-      .then((explanation) => {
+    const explanationPromise = callOpenRouter(prompt, safeAction)
+      .then((content) => {
+        const explanation = parseAiExplanation(content, safeAction);
         completedExplanations.set(requestKey, {
           explanation,
           createdAt: Date.now(),
