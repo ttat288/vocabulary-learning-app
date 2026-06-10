@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { GoogleAdSenseScript } from '@/components/ads/google-adsense-script'
 import { LanguageProvider } from '@/contexts/language-context'
 import { ThemeRuntime } from '@/components/theme/theme-runtime'
 import { getInitialThemeScript } from '@/lib/theme-script'
@@ -13,9 +14,62 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'VocabFlow - Learn English Vocabulary',
-  description: 'Master English vocabulary daily. No login, no distractions. Just learn.',
-  generator: 'v0.app',
+  metadataBase: new URL('https://languageflow.io.vn'),
+  applicationName: 'LanguageFlow',
+  title: {
+    default: 'LanguageFlow - Learn English Vocabulary',
+    template: '%s | LanguageFlow',
+  },
+  description:
+    'Practice English vocabulary with focused study sessions, spaced review, examples, pronunciation, and AI-powered learning help.',
+  keywords: [
+    'English vocabulary',
+    'learn English',
+    'vocabulary practice',
+    'English flashcards',
+    'AI English learning',
+    'LanguageFlow',
+  ],
+  authors: [{ name: 'LanguageFlow' }],
+  creator: 'LanguageFlow',
+  publisher: 'LanguageFlow',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    url: 'https://languageflow.io.vn',
+    siteName: 'LanguageFlow',
+    title: 'LanguageFlow - Learn English Vocabulary',
+    description:
+      'Practice English vocabulary with focused study sessions, spaced review, examples, pronunciation, and AI-powered learning help.',
+    images: [
+      {
+        url: '/icon.svg',
+        width: 512,
+        height: 512,
+        alt: 'LanguageFlow',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'LanguageFlow - Learn English Vocabulary',
+    description:
+      'Practice English vocabulary with focused study sessions, spaced review, examples, pronunciation, and AI-powered learning help.',
+    images: ['/icon.svg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
+  other: {
+    'google-adsense-account':
+      process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT || '',
+  },
   icons: {
     icon: [
       {
@@ -57,6 +111,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: getInitialThemeScript() }} />
       </head>
       <body className="font-sans antialiased">
+        <GoogleAdSenseScript />
         <LanguageProvider>
           <ThemeRuntime />
           {children}

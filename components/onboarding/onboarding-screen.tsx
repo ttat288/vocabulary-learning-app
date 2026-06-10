@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Gauge, Layers, LibraryBig, Zap } from 'lucide-react';
 
+import { AdSlot } from '@/components/ads/ad-slot';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { useTranslations } from '@/hooks/use-translations';
@@ -93,6 +94,32 @@ export function OnboardingScreen({
         <p className='mt-5 text-sm text-muted-foreground'>
           {t('onboarding.footer')}
         </p>
+
+        <AdSlot
+          slot={process.env.NEXT_PUBLIC_ADSENSE_ONBOARDING_SLOT}
+          className='mt-6 overflow-hidden rounded-lg'
+        />
+
+        <nav
+          className='mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground'
+          aria-label='Public links'
+        >
+          <a className='hover:text-primary' href='/about'>
+            About
+          </a>
+          <a className='hover:text-primary' href='/english-tips'>
+            English tips
+          </a>
+          <a className='hover:text-primary' href='/privacy'>
+            Privacy
+          </a>
+          <a className='hover:text-primary' href='/terms'>
+            Terms
+          </a>
+          <a className='hover:text-primary' href='/contact'>
+            Contact
+          </a>
+        </nav>
       </motion.div>
     </main>
   );
