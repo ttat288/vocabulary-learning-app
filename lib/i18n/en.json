@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "VocabFlow",
+    "appName": "languageflow",
     "settings": "Settings",
     "subtitle": "Vocabulary practice"
   },
@@ -28,7 +28,49 @@
     "aiReady": "Ready",
     "retryExplanation": "Get another explanation",
     "tryAgain": "Try again",
-    "completeButton": "Complete"
+    "completeButton": "Complete",
+    "askAi": "Ask AI",
+    "askAiAboutWord": "Ask AI about this word",
+    "chooseAnother": "Choose another",
+    "aiSuggestions": "AI suggestions",
+    "findingSimilarWords": "Finding similar words...",
+    "aiActions": {
+      "simple": "Simple",
+      "examples": "Examples",
+      "naturalUsage": "Usage",
+      "quiz": "Quiz",
+      "checkSentence": "Check sentence",
+      "compare": "Compare"
+    },
+    "aiInputs": {
+      "sentenceLabel": "Your sentence",
+      "sentencePlaceholder": "I climbed the mountain yesterday.",
+      "compareLabel": "Compare with",
+      "comparePlaceholder": "rise"
+    },
+    "aiLoadingFacts": [
+      "Waiting for AI to respond...",
+      "English borrows words from more than 350 other languages.",
+      "The word \"set\" has hundreds of meanings in major English dictionaries.",
+      "A pangram is a sentence that uses all 26 letters of the alphabet.",
+      "\"Goodbye\" comes from the older phrase \"God be with ye.\"",
+      "English spelling is hard because pronunciation changed faster than writing.",
+      "Phrasal verbs can change meaning completely with one short preposition.",
+      "\"I am\" is one of the shortest complete sentences in English.",
+      "The most common letter in written English is \"e.\"",
+      "English uses stress to distinguish some nouns and verbs.",
+      "Major English dictionaries add new words every year.",
+      "The word \"bookkeeper\" has three pairs of double letters in a row.",
+      "English has no official language academy that controls all correct usage.",
+      "The sentence \"The quick brown fox jumps over the lazy dog\" uses every letter.",
+      "Many English words changed meaning over centuries, not just spelling.",
+      "\"Awful\" once meant worthy of awe, not necessarily bad.",
+      "Old English sounded much closer to German than modern English does.",
+      "English adjectives usually follow a hidden order: opinion, size, age, shape, color.",
+      "The word \"nice\" once meant foolish or ignorant before it became positive.",
+      "Some English nouns become verbs without changing form, like \"email\" or \"text.\"",
+      "Silent letters often remain because spelling preserves older pronunciations."
+    ]
   },
   "completion": {
     "heading": "Awesome Work!",

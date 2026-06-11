@@ -15,6 +15,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/language-context';
+import { useTranslations } from '@/hooks/use-translations';
 import {
   buildExplainRequestBody,
   type AiExplanation,
@@ -23,72 +24,74 @@ import {
   type ExplainActionInput,
 } from '@/lib/explain-actions';
 import { type Word } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 type AiActionConfig = {
   id: ExplainAction;
-  label: string;
+  labelKey: string;
   icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
   requiresInput?: boolean;
-  inputLabel?: string;
-  inputPlaceholder?: string;
+  inputLabelKey?: string;
+  inputPlaceholderKey?: string;
   inputType?: 'textarea' | 'input';
 };
 
 const AI_ACTIONS: AiActionConfig[] = [
   {
     id: 'simple',
-    label: 'Simple',
+    labelKey: 'learning.aiActions.simple',
     icon: Sparkles,
   },
   {
     id: 'examples',
-    label: 'Examples',
+    labelKey: 'learning.aiActions.examples',
     icon: ListChecks,
   },
   {
     id: 'natural_usage',
-    label: 'Usage',
+    labelKey: 'learning.aiActions.naturalUsage',
     icon: MessageSquareText,
   },
   {
     id: 'quiz',
-    label: 'Quiz',
+    labelKey: 'learning.aiActions.quiz',
     icon: ClipboardList,
   },
   {
     id: 'check_sentence',
-    label: 'Check sentence',
+    labelKey: 'learning.aiActions.checkSentence',
     icon: CheckCircle2,
     requiresInput: true,
-    inputLabel: 'Your sentence',
-    inputPlaceholder: 'I climb the mountain yesterday.',
+    inputLabelKey: 'learning.aiInputs.sentenceLabel',
+    inputPlaceholderKey: 'learning.aiInputs.sentencePlaceholder',
     inputType: 'textarea',
   },
   {
     id: 'compare',
-    label: 'Compare',
+    labelKey: 'learning.aiActions.compare',
     icon: GitCompareArrows,
     requiresInput: true,
-    inputLabel: 'Compare with',
-    inputPlaceholder: 'rise',
+    inputLabelKey: 'learning.aiInputs.compareLabel',
+    inputPlaceholderKey: 'learning.aiInputs.comparePlaceholder',
     inputType: 'input',
   },
 ];
 
 interface AiActionPanelProps {
   activeAction: ExplainAction;
+  getWord: () => Word | null;
   isLoading: boolean;
   onSubmit: (action: ExplainAction, input?: ExplainActionInput) => void;
-  word: Word;
 }
 
 export function AiActionPanel({
   activeAction,
+  getWord,
   isLoading,
   onSubmit,
-  word,
 }: AiActionPanelProps) {
   const { language } = useLanguage();
+  const t = useTranslations();
   const [selectedAction, setSelectedAction] = useState<ExplainAction | null>(
     null,
   );
@@ -138,6 +141,9 @@ export function AiActionPanel({
     const controller = new AbortController();
 
     async function loadCompareSuggestions() {
+      const word = getWord();
+      if (!word) return;
+
       setIsLoadingCompareSuggestions(true);
 
       try {
@@ -175,7 +181,7 @@ export function AiActionPanel({
     void loadCompareSuggestions();
 
     return () => controller.abort();
-  }, [compareSuggestions.length, language, selectedAction, word]);
+  }, [compareSuggestions.length, getWord, language, selectedAction]);
 
   return (
     <div className='space-y-3 border-b border-border/80 pb-4'>
@@ -189,15 +195,18 @@ export function AiActionPanel({
             <Button
               key={action.id}
               type='button'
-              variant={selected ? 'default' : 'outline'}
+              variant='ai'
               size='sm'
               onClick={() => handleActionClick(action.id)}
               disabled={isLoading && active}
-              className='h-9 justify-start gap-2 px-2 text-xs'
-              title={action.label}
+              className={cn(
+                'h-9 justify-start gap-2 px-2 text-xs',
+                selected && 'ring-2 ring-pink-500/30 ring-offset-1',
+              )}
+              title={t(action.labelKey)}
             >
               <Icon className='h-3.5 w-3.5 shrink-0' aria-hidden />
-              <span className='truncate'>{action.label}</span>
+              <span className='truncate'>{t(action.labelKey)}</span>
             </Button>
           );
         })}
@@ -209,14 +218,20 @@ export function AiActionPanel({
             htmlFor={`ai-action-${selectedConfig.id}`}
             className='text-xs font-medium text-muted-foreground'
           >
-            {selectedConfig.inputLabel}
+            {selectedConfig.inputLabelKey
+              ? t(selectedConfig.inputLabelKey)
+              : ''}
           </label>
           {selectedConfig.inputType === 'textarea' ? (
             <textarea
               id={`ai-action-${selectedConfig.id}`}
               value={userSentence}
               onChange={(event) => setUserSentence(event.target.value)}
-              placeholder={selectedConfig.inputPlaceholder}
+              placeholder={
+                selectedConfig.inputPlaceholderKey
+                  ? t(selectedConfig.inputPlaceholderKey)
+                  : ''
+              }
               rows={3}
               className='w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm leading-5 outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring'
             />
@@ -225,29 +240,34 @@ export function AiActionPanel({
               id={`ai-action-${selectedConfig.id}`}
               value={compareWord}
               onChange={(event) => setCompareWord(event.target.value)}
-              placeholder={selectedConfig.inputPlaceholder}
+              placeholder={
+                selectedConfig.inputPlaceholderKey
+                  ? t(selectedConfig.inputPlaceholderKey)
+                  : ''
+              }
               className='h-9 w-full rounded-md border border-input bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring'
             />
           )}
           <Button
             type='button'
+            variant='ai'
             size='sm'
             onClick={submitSelectedAction}
             disabled={isLoading || !canSubmitInput}
             className='w-full gap-2'
           >
             <Send className='h-3.5 w-3.5' aria-hidden />
-            Ask AI
+            {t('learning.askAi')}
           </Button>
           {selectedAction === 'compare' && (
             <div className='space-y-2 pt-1'>
               <div className='text-xs font-medium text-muted-foreground'>
-                AI suggestions
+                {t('learning.aiSuggestions')}
               </div>
               {isLoadingCompareSuggestions ? (
                 <div className='flex items-center gap-2 text-xs text-muted-foreground'>
                   <Loader2 className='h-3.5 w-3.5 animate-spin' aria-hidden />
-                  Finding similar words...
+                  {t('learning.findingSimilarWords')}
                 </div>
               ) : compareSuggestions.length > 0 ? (
                 <div className='flex flex-wrap gap-2'>
@@ -255,7 +275,7 @@ export function AiActionPanel({
                     <Button
                       key={suggestion.word}
                       type='button'
-                      variant='outline'
+                      variant='ai'
                       size='sm'
                       onClick={() => {
                         setCompareWord(suggestion.word);

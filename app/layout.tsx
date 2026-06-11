@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://languageflow.io.vn'),
-  applicationName: 'LanguageFlow',
+  applicationName: 'languageflow',
   title: {
-    default: 'LanguageFlow - Learn English Vocabulary',
-    template: '%s | LanguageFlow',
+    default: 'languageflow - Learn English Vocabulary',
+    template: '%s | languageflow',
   },
   description:
     'Practice English vocabulary with focused study sessions, spaced review, examples, pronunciation, and AI-powered learning help.',
@@ -28,36 +28,36 @@ export const metadata: Metadata = {
     'vocabulary practice',
     'English flashcards',
     'AI English learning',
-    'LanguageFlow',
+    'languageflow',
   ],
-  authors: [{ name: 'LanguageFlow' }],
-  creator: 'LanguageFlow',
-  publisher: 'LanguageFlow',
+  authors: [{ name: 'languageflow' }],
+  creator: 'languageflow',
+  publisher: 'languageflow',
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     url: 'https://languageflow.io.vn',
-    siteName: 'LanguageFlow',
-    title: 'LanguageFlow - Learn English Vocabulary',
+    siteName: 'languageflow',
+    title: 'languageflow - Learn English Vocabulary',
     description:
       'Practice English vocabulary with focused study sessions, spaced review, examples, pronunciation, and AI-powered learning help.',
     images: [
       {
-        url: '/icon.svg',
+        url: '/languageflow-logo.png',
         width: 512,
         height: 512,
-        alt: 'LanguageFlow',
+        alt: 'languageflow',
       },
     ],
   },
   twitter: {
     card: 'summary',
-    title: 'LanguageFlow - Learn English Vocabulary',
+    title: 'languageflow - Learn English Vocabulary',
     description:
       'Practice English vocabulary with focused study sessions, spaced review, examples, pronunciation, and AI-powered learning help.',
-    images: ['/icon.svg'],
+    images: ['/languageflow-logo.png'],
   },
   robots: {
     index: true,

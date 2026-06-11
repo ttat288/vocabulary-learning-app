@@ -33,6 +33,7 @@ type ExplainRequestBody = {
   action?: string | null;
   userSentence?: string | null;
   compareWord?: string | null;
+  forceRefresh?: boolean | null;
 };
 
 type CachedExplanation = {
@@ -42,6 +43,20 @@ type CachedExplanation = {
 
 const completedExplanations = new Map<string, CachedExplanation>();
 const inFlightExplanations = new Map<string, Promise<AiExplanation>>();
+
+class AiResponseFormatError extends Error {
+  constructor(message = 'AI returned an incomplete response. Please try again.') {
+    super(message);
+    this.name = 'AiResponseFormatError';
+  }
+}
+
+class AiResponseLanguageError extends Error {
+  constructor(message = 'AI returned unsupported characters. Please try again.') {
+    super(message);
+    this.name = 'AiResponseLanguageError';
+  }
+}
 
 function safeTrim(value: unknown) {
   return typeof value === 'string' ? value.trim() : '';
@@ -112,7 +127,10 @@ function extractJsonObject(content: string) {
   const start = candidate.indexOf('{');
   const end = candidate.lastIndexOf('}');
 
-  if (start < 0 || end <= start) return null;
+  if (start < 0) return null;
+  if (end <= start) {
+    throw new AiResponseFormatError();
+  }
 
   return candidate.slice(start, end + 1);
 }
@@ -124,7 +142,7 @@ function parseAiExplanation(
   const jsonText = extractJsonObject(content);
 
   if (!jsonText) {
-    return { type: 'raw', text: content };
+    throw new AiResponseFormatError();
   }
 
   try {
@@ -134,10 +152,77 @@ function parseAiExplanation(
       return parsed as AiExplanation;
     }
   } catch {
-    // Fall through to raw fallback.
+    throw new AiResponseFormatError();
   }
 
-  return { type: 'raw', text: content };
+  throw new AiResponseFormatError();
+}
+
+function containsUnsupportedCharacters(value: unknown): boolean {
+  if (typeof value === 'string') {
+    return /[\u3040-\u30ff\u3400-\u9fff\uf900-\ufaff\uac00-\ud7af]/u.test(
+      value,
+    );
+  }
+
+  if (Array.isArray(value)) {
+    return value.some((item) => containsUnsupportedCharacters(item));
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.values(value).some((item) =>
+      containsUnsupportedCharacters(item),
+    );
+  }
+
+  return false;
+}
+
+function validateAiExplanationLanguage(explanation: AiExplanation) {
+  if (containsUnsupportedCharacters(explanation)) {
+    throw new AiResponseLanguageError();
+  }
+}
+
+function buildRetryPrompt(prompt: string, error: unknown) {
+  if (error instanceof AiResponseLanguageError) {
+    return `${prompt}
+
+The previous response contained Chinese, Japanese, Korean, or other unsupported characters.
+Return one complete valid JSON object using only English and Vietnamese text.`;
+  }
+
+  return `${prompt}
+
+The previous response was invalid or incomplete JSON.
+Return one complete valid JSON object only. Do not add markdown or text outside JSON.`;
+}
+
+async function generateAiExplanation(prompt: string, action: ExplainAction) {
+  let lastError: unknown = null;
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const content = await callOpenRouter(
+      attempt === 0 ? prompt : buildRetryPrompt(prompt, lastError),
+      action,
+    );
+
+    try {
+      const explanation = parseAiExplanation(content, action);
+      validateAiExplanationLanguage(explanation);
+      return explanation;
+    } catch (error) {
+      if (
+        !(error instanceof AiResponseFormatError) &&
+        !(error instanceof AiResponseLanguageError)
+      ) {
+        throw error;
+      }
+      lastError = error;
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new AiResponseFormatError();
 }
 
 async function callOpenRouter(prompt: string, action: ExplainAction) {
@@ -165,7 +250,7 @@ async function callOpenRouter(prompt: string, action: ExplainAction) {
             'HTTP-Referer': process.env.VERCEL_URL
               ? `https://${process.env.VERCEL_URL}`
               : 'http://localhost:3000',
-            'X-Title': 'VocabFlow - AI Explanation',
+            'X-Title': 'languageflow - AI Explanation',
           },
           body: JSON.stringify({
             model: process.env.OPENROUTER_MODEL || DEFAULT_OPENROUTER_MODEL,
@@ -299,7 +384,10 @@ export async function POST(request: NextRequest) {
       ...actionInput,
     });
 
-    const cachedExplanation = getCachedExplanation(requestKey);
+    const shouldForceRefresh = body.forceRefresh === true;
+    const cachedExplanation = shouldForceRefresh
+      ? null
+      : getCachedExplanation(requestKey);
 
     if (cachedExplanation) {
       return NextResponse.json({
@@ -310,7 +398,9 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const inFlightExplanation = inFlightExplanations.get(requestKey);
+    const inFlightExplanation = shouldForceRefresh
+      ? null
+      : inFlightExplanations.get(requestKey);
 
     if (inFlightExplanation) {
       const explanation = await inFlightExplanation;
@@ -357,9 +447,8 @@ export async function POST(request: NextRequest) {
       ...actionInput,
     });
 
-    const explanationPromise = callOpenRouter(prompt, safeAction)
-      .then((content) => {
-        const explanation = parseAiExplanation(content, safeAction);
+    const explanationPromise = generateAiExplanation(prompt, safeAction)
+      .then((explanation) => {
         completedExplanations.set(requestKey, {
           explanation,
           createdAt: Date.now(),
@@ -381,6 +470,15 @@ export async function POST(request: NextRequest) {
       remaining: rateLimitCheck.remaining,
     });
   } catch (error) {
+    if (
+      error instanceof AiResponseFormatError ||
+      error instanceof AiResponseLanguageError
+    ) {
+      console.error('[v0] Invalid AI response format:', error.message);
+
+      return NextResponse.json({ error: error.message }, { status: 502 });
+    }
+
     if (error instanceof Error) {
       console.error('[v0] Error in explain API:', error.message);
 

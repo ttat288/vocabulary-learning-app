@@ -5,7 +5,7 @@ import { PageSection, StaticPage } from '@/components/public/static-page';
 export const metadata: Metadata = {
   title: 'Terms of Use',
   description:
-    'Terms of Use for LanguageFlow, an English vocabulary learning app.',
+    'Terms of Use for languageflow, an English vocabulary learning app.',
   alternates: {
     canonical: '/terms',
   },
@@ -15,12 +15,12 @@ export default function TermsPage() {
   return (
     <StaticPage
       title='Terms of Use'
-      description='Rules for using LanguageFlow and its learning features.'
+      description='Rules for using languageflow and its learning features.'
       updatedAt='June 10, 2026'
     >
       <PageSection title='Use of the service'>
         <p>
-          LanguageFlow is provided as a vocabulary learning tool. You may use it
+          languageflow is provided as a vocabulary learning tool. You may use it
           for personal study, review, and English practice.
         </p>
       </PageSection>
@@ -50,7 +50,7 @@ export default function TermsPage() {
 
       <PageSection title='Advertising'>
         <p>
-          LanguageFlow may display advertising. Do not click ads in a misleading
+          languageflow may display advertising. Do not click ads in a misleading
           or automated way.
         </p>
       </PageSection>
@@ -58,7 +58,7 @@ export default function TermsPage() {
       <PageSection title='Changes'>
         <p>
           We may update these terms as the app evolves. Continued use of
-          LanguageFlow means you accept the current terms.
+          languageflow means you accept the current terms.
         </p>
       </PageSection>
 

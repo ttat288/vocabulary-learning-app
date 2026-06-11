@@ -113,15 +113,22 @@ export default function Page() {
             <div className='max-w-6xl mx-auto px-4 py-4 flex items-center justify-between'>
               <button
                 type='button'
-                className='text-left'
+                className='flex items-center gap-3 text-left'
                 onClick={() => setScreen('onboarding')}
               >
-                <h1 className='text-xl font-semibold text-foreground transition-colors hover:text-primary'>
-                  VocabFlow
-                </h1>
-                <p className='text-xs text-muted-foreground'>
-                  {t('common.subtitle')}
-                </p>
+                <img
+                  src='/languageflow-logo.png'
+                  alt=''
+                  className='h-9 w-9 rounded-lg object-contain'
+                />
+                <div>
+                  <h1 className='text-xl font-semibold text-foreground transition-colors hover:text-primary'>
+                    {t('common.appName')}
+                  </h1>
+                  <p className='text-xs text-muted-foreground'>
+                    {t('common.subtitle')}
+                  </p>
+                </div>
               </button>
               <Button
                 type='button'

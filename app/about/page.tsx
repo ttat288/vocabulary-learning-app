@@ -5,7 +5,7 @@ import { PageSection, StaticPage } from '@/components/public/static-page';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'About LanguageFlow, a focused English vocabulary practice app with review and AI learning help.',
+    'About languageflow, a focused English vocabulary practice app with review and AI learning help.',
   alternates: {
     canonical: '/about',
   },
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <StaticPage
-      title='About LanguageFlow'
+      title='About languageflow'
       description='A focused English vocabulary practice app built for short, repeatable study sessions.'
     >
-      <PageSection title='What LanguageFlow does'>
+      <PageSection title='What languageflow does'>
         <p>
-          LanguageFlow helps learners practice English vocabulary through daily
+          languageflow helps learners practice English vocabulary through daily
           study goals, examples, pronunciation support, review queues, and
           optional AI learning help.
         </p>
@@ -37,7 +37,7 @@ export default function AboutPage() {
       <PageSection title='Learning philosophy'>
         <p>
           The app is designed to keep study sessions simple. Instead of showing
-          many distractions at once, LanguageFlow focuses on one word, one
+          many distractions at once, languageflow focuses on one word, one
           decision, and one clear next step.
         </p>
       </PageSection>

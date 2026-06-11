@@ -32,6 +32,29 @@ export function getTranslation(lang: Language, key: string): string {
   return value || key;
 }
 
+export function getTranslationList(lang: Language, key: string): string[] {
+  const keys = key.split('.');
+  let value: any = translations[lang];
+
+  for (const k of keys) {
+    if (value && typeof value === 'object' && k in value) {
+      value = value[k];
+    } else {
+      value = translations.en;
+      for (const fallbackKey of keys) {
+        if (value && typeof value === 'object' && fallbackKey in value) {
+          value = value[fallbackKey];
+        } else {
+          return [];
+        }
+      }
+      return Array.isArray(value) ? value : [];
+    }
+  }
+
+  return Array.isArray(value) ? value : [];
+}
+
 export function getLanguageLabel(lang: Language): string {
   return lang === 'en' ? 'English' : 'Tiếng Việt';
 }

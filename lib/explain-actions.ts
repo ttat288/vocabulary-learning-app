@@ -19,6 +19,7 @@ export type ExplainActionInput = {
 
 export type ExplainRequestOptions = ExplainActionInput & {
   action?: ExplainAction;
+  forceRefresh?: boolean;
 };
 
 export type ExplainPromptInput = ExplainActionInput & {
@@ -181,12 +182,13 @@ export function buildExplainRequestBody(
     exampleMeaning: word.exampleMeaning,
     language,
     action,
+    forceRefresh: options.forceRefresh === true,
     ...actionInput,
   };
 }
 
 export function getExplainMaxTokens(action: ExplainAction) {
-  return action === 'simple' ? 420 : 900;
+  return action === 'simple' ? 700 : 1100;
 }
 
 function getJsonSchemaInstruction(action: ExplainAction) {
@@ -300,6 +302,7 @@ Rules:
 - Keep the answer practical for real-life usage.
 - If responding in Vietnamese, explain clearly in Vietnamese but keep English examples in English.
 - Keep English example sentences in English.
+- Do not use Chinese, Japanese, Korean, or other non-English/non-Vietnamese characters.
 ${getJsonSchemaInstruction(action)}
 `;
 

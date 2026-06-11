@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "VocabFlow",
+    "appName": "languageflow",
     "settings": "Cài đặt",
     "subtitle": "Luyện từ vựng"
   },
@@ -28,7 +28,49 @@
     "aiReady": "Sẵn sàng",
     "retryExplanation": "Xin giải thích khác",
     "tryAgain": "Thử lại",
-    "completeButton": "Hoàn thành"
+    "completeButton": "Hoàn thành",
+    "askAi": "Hỏi AI",
+    "askAiAboutWord": "Hỏi AI về từ này",
+    "chooseAnother": "Chọn kiểu khác",
+    "aiSuggestions": "Gợi ý từ AI",
+    "findingSimilarWords": "Đang tìm từ tương tự...",
+    "aiActions": {
+      "simple": "Giải thích đơn giản",
+      "examples": "Ví dụ",
+      "naturalUsage": "Cách dùng",
+      "quiz": "Câu hỏi",
+      "checkSentence": "Kiểm tra câu",
+      "compare": "So sánh"
+    },
+    "aiInputs": {
+      "sentenceLabel": "Câu của bạn",
+      "sentencePlaceholder": "I climbed the mountain yesterday.",
+      "compareLabel": "So sánh với",
+      "comparePlaceholder": "rise"
+    },
+    "aiLoadingFacts": [
+      "Chờ AI phản hồi...",
+      "Tiếng Anh mượn từ từ hơn 350 ngôn ngữ khác nhau.",
+      "Từ \"set\" có hàng trăm nghĩa trong nhiều từ điển tiếng Anh lớn.",
+      "Pangram là câu dùng đủ 26 chữ cái trong bảng chữ cái.",
+      "\"Goodbye\" bắt nguồn từ cụm \"God be with ye.\"",
+      "Chính tả tiếng Anh khó vì cách phát âm thay đổi nhanh hơn cách viết.",
+      "Phrasal verbs có thể đổi nghĩa hoàn toàn chỉ vì một giới từ ngắn.",
+      "\"I am\" là một trong những câu hoàn chỉnh ngắn nhất trong tiếng Anh.",
+      "Chữ cái xuất hiện nhiều nhất trong văn bản tiếng Anh là \"e.\"",
+      "Tiếng Anh dùng trọng âm để phân biệt một số danh từ và động từ.",
+      "Từ mới vẫn được thêm vào các từ điển tiếng Anh lớn mỗi năm.",
+      "Từ \"bookkeeper\" có ba cặp chữ cái đôi liên tiếp.",
+      "Tiếng Anh không có học viện ngôn ngữ chính thức kiểm soát toàn bộ cách dùng đúng.",
+      "Câu \"The quick brown fox jumps over the lazy dog\" dùng đủ mọi chữ cái tiếng Anh.",
+      "Nhiều từ tiếng Anh đã đổi nghĩa qua nhiều thế kỷ, không chỉ đổi cách viết.",
+      "\"Awful\" từng có nghĩa là đáng kính sợ, không nhất thiết là tệ.",
+      "Tiếng Anh cổ nghe gần với tiếng Đức hơn tiếng Anh hiện đại.",
+      "Tính từ tiếng Anh thường theo thứ tự ngầm: ý kiến, kích thước, tuổi, hình dạng, màu sắc.",
+      "Từ \"nice\" từng có nghĩa là ngốc nghếch hoặc thiếu hiểu biết trước khi mang nghĩa tích cực.",
+      "Một số danh từ tiếng Anh có thể thành động từ mà không đổi dạng, như \"email\" hoặc \"text.\"",
+      "Chữ câm thường còn lại vì chính tả giữ dấu vết của cách phát âm cũ."
+    ]
   },
   "completion": {
     "heading": "Tuyệt Vời!",

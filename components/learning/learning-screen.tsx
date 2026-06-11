@@ -2,12 +2,21 @@
 
 import { useVocabulary } from '@/hooks/use-vocabulary';
 import { WordCard } from './word-card';
+import { AiCard } from './ai-card';
 import { ProgressBar } from './progress-bar';
 import { ActionButtons } from './action-buttons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { explainCache } from '@/lib/explain-cache';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BotOff } from 'lucide-react';
+import { useExplain } from '@/hooks/use-explain';
+import { useLanguage } from '@/contexts/language-context';
+import {
+  DEFAULT_EXPLAIN_ACTION,
+  type ExplainAction,
+  type ExplainActionInput,
+  type ExplainRequestOptions,
+} from '@/lib/explain-actions';
 
 interface LearningScreenProps {
   onComplete: () => void;
@@ -26,14 +35,38 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
     markAsNotRemembered,
     isGoalReached,
   } = useVocabulary();
+  const { language } = useLanguage();
+  const {
+    explanation,
+    isLoading: isAiLoading,
+    error,
+    status,
+    action,
+    explain,
+    retry,
+    clear,
+  } = useExplain();
+  const currentWordRef = useRef(currentWord);
   const rapidAdvanceTimestampsRef = useRef<number[]>([]);
+  const lastRequestOptionsRef = useRef<ExplainRequestOptions>({
+    action: DEFAULT_EXPLAIN_ACTION,
+  });
   const [showAiAutoDisabledNotice, setShowAiAutoDisabledNotice] =
     useState(false);
+
+  useEffect(() => {
+    currentWordRef.current = currentWord;
+  }, [currentWord]);
 
   useEffect(() => {
     if (progress?.aiEnabled) return;
     rapidAdvanceTimestampsRef.current = [];
   }, [progress?.aiEnabled]);
+
+  useEffect(() => {
+    lastRequestOptionsRef.current = { action: DEFAULT_EXPLAIN_ACTION };
+    clear();
+  }, [clear, currentWord?.id, language, progress?.aiEnabled]);
 
   useEffect(() => {
     if (!showAiAutoDisabledNotice) return;
@@ -68,6 +101,35 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
     explainCache.clear();
     setShowAiAutoDisabledNotice(true);
   };
+
+  const requestActionExplain = useCallback(
+    async (selectedAction: ExplainAction, input: ExplainActionInput = {}) => {
+      const word = currentWordRef.current;
+      if (!word || !(progress?.aiEnabled ?? false)) return;
+
+      const options = {
+        ...input,
+        action: selectedAction,
+      };
+
+      lastRequestOptionsRef.current = options;
+      await explain(word, options);
+    },
+    [explain, progress?.aiEnabled],
+  );
+
+  const handleRetry = useCallback(async () => {
+    const word = currentWordRef.current;
+    if (!word) return;
+    await retry(word, lastRequestOptionsRef.current);
+  }, [retry]);
+
+  const resetAiPanel = useCallback(() => {
+    lastRequestOptionsRef.current = { action: DEFAULT_EXPLAIN_ACTION };
+    clear();
+  }, [clear]);
+
+  const getCurrentWord = useCallback(() => currentWordRef.current, []);
 
   if (isLoading) {
     return (
@@ -161,22 +223,46 @@ export function LearningScreen({ onComplete }: LearningScreenProps) {
 
       <div className='relative min-h-0 flex-1'>
         <div className='flex h-full min-h-0 items-start justify-center'>
-          <AnimatePresence mode='wait'>
-            <motion.div
-              key={currentWord.id}
-              layout
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className='h-full w-full'
-            >
-              <WordCard
-                word={currentWord}
-                aiEnabled={progress.aiEnabled ?? false}
-              />
-            </motion.div>
-          </AnimatePresence>
+          <div
+            className={
+              progress.aiEnabled
+                ? 'grid h-full min-h-0 w-full gap-4 lg:grid-cols-[minmax(0,1fr)_23rem]'
+                : 'grid h-full min-h-0 w-full'
+            }
+          >
+            <AnimatePresence mode='wait'>
+              <motion.div
+                key={currentWord.id}
+                layout
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className='h-full w-full'
+              >
+                <WordCard
+                  word={currentWord}
+                  aiEnabled={progress.aiEnabled ?? false}
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {progress.aiEnabled && (
+                <AiCard
+                  activeAction={action}
+                  explanation={explanation}
+                  error={error}
+                  getWord={getCurrentWord}
+                  isLoading={isAiLoading}
+                  onExplain={requestActionExplain}
+                  onReset={resetAiPanel}
+                  onRetry={handleRetry}
+                  status={status}
+                />
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
 

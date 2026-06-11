@@ -4,7 +4,7 @@ import { PageSection, StaticPage } from '@/components/public/static-page';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Contact LanguageFlow for support, privacy, and product feedback.',
+  description: 'Contact languageflow for support, privacy, and product feedback.',
   alternates: {
     canonical: '/contact',
   },
@@ -14,7 +14,7 @@ export default function ContactPage() {
   return (
     <StaticPage
       title='Contact'
-      description='Get in touch about LanguageFlow support, feedback, privacy, or advertising questions.'
+      description='Get in touch about languageflow support, feedback, privacy, or advertising questions.'
     >
       <PageSection title='Email'>
         <p>

@@ -350,10 +350,11 @@ export function ExplanationBox({
           <StructuredExplanationView explanation={explanation} />
           <Button
             type='button'
+            variant='ai'
             size='sm'
             onClick={onRetry}
             disabled={isLoading}
-            className='gap-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0'
+            className='gap-2'
           >
             <RefreshCw className='h-3.5 w-3.5' />
             {t('learning.retryExplanation')}
@@ -376,10 +377,11 @@ export function ExplanationBox({
           </div>
           <Button
             type='button'
+            variant='ai'
             size='sm'
             onClick={onRetry}
             disabled={isLoading}
-            className='gap-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white border-0'
+            className='gap-2'
           >
             <RefreshCw className='h-3.5 w-3.5' />
             {t('learning.tryAgain')}

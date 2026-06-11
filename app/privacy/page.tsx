@@ -5,7 +5,7 @@ import { PageSection, StaticPage } from '@/components/public/static-page';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description:
-    'Privacy Policy for LanguageFlow, including local storage, analytics, advertising, cookies, and AI learning features.',
+    'Privacy Policy for languageflow, including local storage, analytics, advertising, cookies, and AI learning features.',
   alternates: {
     canonical: '/privacy',
   },
@@ -15,12 +15,12 @@ export default function PrivacyPage() {
   return (
     <StaticPage
       title='Privacy Policy'
-      description='How LanguageFlow handles learning data, analytics, advertising, cookies, and AI-assisted features.'
+      description='How languageflow handles learning data, analytics, advertising, cookies, and AI-assisted features.'
       updatedAt='June 10, 2026'
     >
       <PageSection title='Overview'>
         <p>
-          LanguageFlow is an English vocabulary learning app. We keep the app
+          languageflow is an English vocabulary learning app. We keep the app
           lightweight and do not require account registration for core study
           features.
         </p>
@@ -45,14 +45,14 @@ export default function PrivacyPage() {
 
       <PageSection title='Analytics'>
         <p>
-          LanguageFlow may use privacy-conscious analytics, such as Vercel
+          languageflow may use privacy-conscious analytics, such as Vercel
           Analytics, to understand aggregate usage and improve the product.
         </p>
       </PageSection>
 
       <PageSection title='Advertising and cookies'>
         <p>
-          LanguageFlow may display ads through Google AdSense or similar
+          languageflow may display ads through Google AdSense or similar
           advertising partners. Advertising partners may use cookies, device
           identifiers, and similar technologies to serve, measure, and improve
           ads. You can control cookies through your browser settings and, where
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
         <p>
           We may use third-party services for hosting, analytics, advertising,
           and AI responses. These providers process data according to their own
-          policies and the configuration used by LanguageFlow.
+          policies and the configuration used by languageflow.
         </p>
       </PageSection>
 

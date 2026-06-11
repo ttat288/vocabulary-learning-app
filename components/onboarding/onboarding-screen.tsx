@@ -44,7 +44,14 @@ export function OnboardingScreen({
       >
         <div className='mb-8 max-w-2xl'>
           <Badge variant='outline' className='mb-4'>
-            VocabFlow
+            <span className='inline-flex items-center gap-2'>
+              <img
+                src='/languageflow-logo.png'
+                alt=''
+                className='h-4 w-4 object-contain'
+              />
+              {t('common.appName')}
+            </span>
           </Badge>
           <h1 className='text-4xl font-semibold tracking-normal text-foreground sm:text-5xl'>
             {t('onboarding.heading')}

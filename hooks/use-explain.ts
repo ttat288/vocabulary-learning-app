@@ -93,6 +93,7 @@ export function useExplain() {
       const requestOptions = {
         ...options,
         action: options.action ?? action,
+        forceRefresh: true,
       };
       // Clear cache to force regeneration
       explainCache.clearEntry(word.id, language, requestOptions);
